@@ -2,7 +2,7 @@
   "expo": {
     "name": "UniMeal Cafe",
     "slug": "unimeal-cafe-app",
-    "version": "1.0.0",
+    "version": "1.0.2",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
     "scheme": "unimeal-cafe",
