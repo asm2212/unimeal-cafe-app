@@ -6,8 +6,9 @@
     "orientation": "portrait",
     "userInterfaceStyle": "light",
     "scheme": "unimeal-cafe",
+    "icon": "./assets/icon.png",
     "extra": {
-      "API_URL": "https://173.212.215.22:3003",
+      "API_URL": "https://unimeal-backend.duckdns.org",
       "router": {},
       "eas": {
         "projectId": "89b29c9c-7521-4fb9-b3d7-9c5773cf24ac"

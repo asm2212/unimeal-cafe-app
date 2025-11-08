@@ -1,0 +1,48 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="1024" height="1024" fill="#8B4513" rx="180"/>
+  
+  <!-- Coffee cup -->
+  <g transform="translate(512, 512)">
+    <!-- Steam lines -->
+    <path d="M -120 -280 Q -120 -320 -100 -340" stroke="#F5DEB3" stroke-width="12" fill="none" stroke-linecap="round" opacity="0.8"/>
+    <path d="M -60 -280 Q -60 -330 -40 -350" stroke="#F5DEB3" stroke-width="12" fill="none" stroke-linecap="round" opacity="0.8"/>
+    <path d="M 0 -280 Q 0 -320 20 -340" stroke="#F5DEB3" stroke-width="12" fill="none" stroke-linecap="round" opacity="0.8"/>
+    <path d="M 60 -280 Q 60 -330 80 -350" stroke="#F5DEB3" stroke-width="12" fill="none" stroke-linecap="round" opacity="0.8"/>
+    <path d="M 120 -280 Q 120 -320 140 -340" stroke="#F5DEB3" stroke-width="12" fill="none" stroke-linecap="round" opacity="0.8"/>
+    
+    <!-- Cup body -->
+    <path d="M -180 -240 L -140 120 Q -140 160 -100 180 L 100 180 Q 140 160 140 120 L 180 -240 Z" 
+          fill="#FFFFFF" stroke="#D2691E" stroke-width="8"/>
+    
+    <!-- Coffee inside cup -->
+    <ellipse cx="0" cy="-220" rx="170" ry="30" fill="#6F4E37"/>
+    <path d="M -170 -220 L -135 100 Q -135 130 -100 145 L 100 145 Q 135 130 135 100 L 170 -220 Z" 
+          fill="#8B4513" opacity="0.9"/>
+    
+    <!-- Cup handle -->
+    <path d="M 180 -180 Q 280 -100 280 0 Q 280 100 180 180" 
+          stroke="#FFFFFF" stroke-width="35" fill="none"/>
+    <path d="M 180 -180 Q 280 -100 280 0 Q 280 100 180 180" 
+          stroke="#D2691E" stroke-width="8" fill="none"/>
+    
+    <!-- Saucer -->
+    <ellipse cx="0" cy="200" rx="240" ry="40" fill="#FFFFFF" stroke="#D2691E" stroke-width="8"/>
+    <ellipse cx="0" cy="195" rx="240" ry="35" fill="#F5F5F5"/>
+  </g>
+  
+  <!-- Decorative coffee beans -->
+  <g opacity="0.3">
+    <ellipse cx="150" cy="150" rx="25" ry="35" fill="#3E2723" transform="rotate(-30 150 150)"/>
+    <ellipse cx="150" cy="150" rx="8" ry="35" fill="#5D4037" transform="rotate(-30 150 150)"/>
+    
+    <ellipse cx="874" cy="200" rx="25" ry="35" fill="#3E2723" transform="rotate(45 874 200)"/>
+    <ellipse cx="874" cy="200" rx="8" ry="35" fill="#5D4037" transform="rotate(45 874 200)"/>
+    
+    <ellipse cx="200" cy="824" rx="25" ry="35" fill="#3E2723" transform="rotate(15 200 824)"/>
+    <ellipse cx="200" cy="824" rx="8" ry="35" fill="#5D4037" transform="rotate(15 200 824)"/>
+    
+    <ellipse cx="824" cy="874" rx="25" ry="35" fill="#3E2723" transform="rotate(-45 824 874)"/>
+    <ellipse cx="824" cy="874" rx="8" ry="35" fill="#5D4037" transform="rotate(-45 824 874)"/>
+  </g>
+</svg>

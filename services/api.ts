@@ -1,6 +1,6 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-const API_URL = process.env.EXPO_PUBLIC_API_URL || 'http://173.212.215.22:3003';
+const API_URL = process.env.EXPO_PUBLIC_API_URL || 'https://unimeal-backend.duckdns.org';
 
 const api = axios.create({
   baseURL: API_URL,
