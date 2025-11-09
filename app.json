@@ -2,7 +2,7 @@
   "expo": {
     "name": "UniMeal Cafe",
     "slug": "unimeal-cafe-app",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
     "scheme": "unimeal-cafe",
@@ -26,11 +26,9 @@
         "android.permission.READ_MEDIA_IMAGES",
         "android.permission.READ_EXTERNAL_STORAGE",
         "android.permission.WRITE_EXTERNAL_STORAGE",
-        "android.permission.RECORD_AUDIO",
         "android.permission.READ_MEDIA_VISUAL_USER_SELECTED",
         "android.permission.ACCESS_MEDIA_LOCATION",
-        "android.permission.READ_MEDIA_VIDEO",
-        "android.permission.READ_MEDIA_AUDIO"
+        "android.permission.READ_MEDIA_VIDEO"
       ]
     },
     "plugins": [
@@ -40,7 +38,8 @@
         {
           "photosPermission": "Allow UniMeal Cafe to save QR codes to your photo library.",
           "savePhotosPermission": "Allow UniMeal Cafe to save QR codes to your photo library.",
-          "isAccessMediaLocationEnabled": true
+          "isAccessMediaLocationEnabled": true,
+          "isAudioEnabled": false
         }
       ],
       [

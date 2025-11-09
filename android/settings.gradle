@@ -22,14 +22,13 @@ plugins {
   id("expo-autolinking-settings")
 }
 
-extensions.configure(com.facebook.react.ReactSettingsExtension) { react ->
+extensions.configure(com.facebook.react.ReactSettingsExtension) { ex ->
   if (System.getenv('EXPO_USE_COMMUNITY_AUTOLINKING') == '1') {
-    react.autolinkLibrariesFromCommand()
+    ex.autolinkLibrariesFromCommand()
   } else {
-    react.autolinkLibrariesFromCommand(expoAutolinking.rnConfigCommand)
+    ex.autolinkLibrariesFromCommand(expoAutolinking.rnConfigCommand)
   }
 }
-
 expoAutolinking.useExpoModules()
 
 rootProject.name = 'UniMeal Cafe'

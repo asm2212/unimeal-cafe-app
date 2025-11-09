@@ -15,7 +15,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import QRCode from 'react-native-qrcode-svg';
-import * as FileSystem from 'expo-file-system';
+import * as FileSystem from 'expo-file-system/legacy';
 import * as MediaLibrary from 'expo-media-library';
 import * as Print from 'expo-print';
 import Colors from '../../constants/Colors';
@@ -106,8 +106,8 @@ export default function QRCodeScreen() {
         return;
       }
 
-      // Request gallery permission
-      const { status } = await MediaLibrary.requestPermissionsAsync();
+      // Request gallery permission (false = only photos/videos, no audio)
+      const { status } = await MediaLibrary.requestPermissionsAsync(false);
       if (status !== 'granted') {
         Alert.alert(
           'Permission Required',
@@ -125,23 +125,35 @@ export default function QRCodeScreen() {
 
       qrRef.current.toDataURL(async (dataURL: string) => {
         try {
+          if (!dataURL) {
+            Alert.alert('Error', 'Failed to generate QR code image');
+            return;
+          }
+
           const filename = `${cafeInfo.name.replace(/[^a-zA-Z0-9]/g, '_')}_QR_${Date.now()}.png`;
           const fileUri = FileSystem.documentDirectory + filename;
 
-          await FileSystem.writeAsStringAsync(fileUri, dataURL.split(',')[1], {
+          // Extract base64 data from data URL
+          const base64Data = dataURL.includes('base64,') 
+            ? dataURL.split('base64,')[1] 
+            : dataURL;
+
+          await FileSystem.writeAsStringAsync(fileUri, base64Data, {
             encoding: FileSystem.EncodingType.Base64,
           });
 
-          await MediaLibrary.saveToLibraryAsync(fileUri);
+          const asset = await MediaLibrary.createAssetAsync(fileUri);
+          await MediaLibrary.createAlbumAsync('UniMeal', asset, false);
+          
           Alert.alert('Success', 'QR Code saved to your gallery!');
         } catch (saveError) {
           console.error('Save error:', saveError);
-          Alert.alert('Error', 'Failed to save QR code.');
+          Alert.alert('Error', 'Failed to save QR code. Please try again.');
         }
       });
     } catch (error) {
       console.error('Download error:', error);
-      Alert.alert('Error', 'Failed to download QR code.');
+      Alert.alert('Error', 'Failed to download QR code. Please check permissions.');
     }
   };
 
@@ -153,28 +165,109 @@ export default function QRCodeScreen() {
       }
 
       qrRef.current.toDataURL(async (dataURL: string) => {
-        const html = `
-          <html>
-            <head>
-              <style>
-                body { text-align: center; font-family: Arial; margin: 0; padding: 20px; }
-                .qr { width: 8cm; height: 8cm; margin: 20px auto; }
-                .title { font-size: 22px; font-weight: bold; color: #f97316; }
-              </style>
-            </head>
-            <body>
-              <div class="title">${cafeInfo.name}</div>
-              <p>Scan to Order Meals</p>
-              <img src="${dataURL}" class="qr" />
-              <p>Generated on ${new Date().toLocaleDateString()}</p>
-            </body>
-          </html>
-        `;
-        await Print.printAsync({ html });
+        try {
+          if (!dataURL) {
+            Alert.alert('Error', 'Failed to generate QR code image for printing');
+            return;
+          }
+
+          // Ensure data URL has proper format
+          const imageData = dataURL.startsWith('data:') 
+            ? dataURL 
+            : `data:image/png;base64,${dataURL}`;
+
+          const html = `
+            <!DOCTYPE html>
+            <html>
+              <head>
+                <meta charset="utf-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <style>
+                  @page {
+                    margin: 2cm;
+                  }
+                  body { 
+                    text-align: center; 
+                    font-family: Arial, sans-serif; 
+                    margin: 0; 
+                    padding: 20px;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                  }
+                  .container {
+                    max-width: 600px;
+                    margin: 0 auto;
+                  }
+                  .title { 
+                    font-size: 28px; 
+                    font-weight: bold; 
+                    color: #f97316; 
+                    margin-bottom: 10px;
+                  }
+                  .subtitle {
+                    font-size: 18px;
+                    color: #333;
+                    margin-bottom: 30px;
+                  }
+                  .qr-wrapper {
+                    background: #f9fafb;
+                    padding: 30px;
+                    border-radius: 12px;
+                    margin: 20px 0;
+                    display: inline-block;
+                  }
+                  .qr { 
+                    width: 300px; 
+                    height: 300px; 
+                    display: block;
+                  }
+                  .footer {
+                    font-size: 14px;
+                    color: #666;
+                    margin-top: 20px;
+                  }
+                  .instructions {
+                    font-size: 16px;
+                    color: #555;
+                    margin-top: 20px;
+                    line-height: 1.6;
+                  }
+                </style>
+              </head>
+              <body>
+                <div class="container">
+                  <div class="title">${cafeInfo.name}</div>
+                  <div class="subtitle">UniMeal Cafe QR Code</div>
+                  <div class="qr-wrapper">
+                    <img src="${imageData}" class="qr" alt="QR Code" />
+                  </div>
+                  <div class="instructions">
+                    <strong>How to use:</strong><br/>
+                    Students scan this QR code to register and order meals at your cafe
+                  </div>
+                  <div class="footer">
+                    Generated on ${new Date().toLocaleDateString()} at ${new Date().toLocaleTimeString()}
+                  </div>
+                </div>
+              </body>
+            </html>
+          `;
+          
+          await Print.printAsync({ 
+            html,
+            width: 612,
+            height: 792,
+          });
+        } catch (printError) {
+          console.error('Print processing error:', printError);
+          Alert.alert('Error', 'Failed to process QR code for printing.');
+        }
       });
     } catch (error) {
       console.error('Print error:', error);
-      Alert.alert('Error', 'Failed to print QR code.');
+      Alert.alert('Error', 'Failed to print QR code. Please try again.');
     }
   };
 
