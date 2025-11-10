@@ -36,7 +36,7 @@
 
 ### For Cafe Owners:
 
-1. **Download** the APK file (app-release.apk)
+1. **Download** the APK file (unimeal-cafe-v2.1.0.apk)
 2. **Enable Unknown Sources:**
    - Go to Settings → Security
    - Enable "Install from Unknown Sources"

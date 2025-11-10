@@ -22,7 +22,7 @@ Digital cafeteria management system for cafe owners. Manage students, process tr
 
 **Latest Release:** [v2.1.0](https://github.com/asm2212/unimeal-cafe-app/releases/latest)
 
-**Direct APK Download:** [app-release.apk](https://github.com/asm2212/unimeal-cafe-app/releases/download/v2.1.0/app-release.apk)
+**Direct APK Download:** [unimeal-cafe-v2.1.0.apk](https://github.com/asm2212/unimeal-cafe-app/releases/download/v2.1.0/unimeal-cafe-v2.1.0.apk)
 
 ## 📋 Requirements
 
