@@ -16,7 +16,7 @@
       "API_URL": "https://unimeal-backend.duckdns.org",
       "router": {},
       "eas": {
-        "projectId": "89b29c9c-7521-4fb9-b3d7-9c5773cf24ac"
+        "projectId": "d91cecdd-6d32-4de2-894e-84a9a9d1bc92"
       }
     },
     "ios": {
@@ -39,7 +39,8 @@
         "android.permission.ACCESS_MEDIA_LOCATION",
         "android.permission.READ_MEDIA_VIDEO",
         "android.permission.POST_NOTIFICATIONS",
-        "android.permission.VIBRATE"
+        "android.permission.VIBRATE",
+        "android.permission.READ_MEDIA_AUDIO"
       ]
     },
     "plugins": [
