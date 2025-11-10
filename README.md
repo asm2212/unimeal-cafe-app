@@ -2,7 +2,7 @@
 
 Digital cafeteria management system for cafe owners. Manage students, process transactions, and track revenue efficiently.
 
-![Version](https://img.shields.io/badge/version-2.0.0-orange)
+![Version](https://img.shields.io/badge/version-2.1.0-orange)
 ![Platform](https://img.shields.io/badge/platform-Android-green)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 
@@ -20,9 +20,9 @@ Digital cafeteria management system for cafe owners. Manage students, process tr
 
 ## 📥 Download
 
-**Latest Release:** [v2.0.0](https://github.com/asm2212/unimeal-cafe-app/releases/latest)
+**Latest Release:** [v2.1.0](https://github.com/asm2212/unimeal-cafe-app/releases/latest)
 
-**Direct APK Download:** [app-release.apk](https://github.com/asm2212/unimeal-cafe-app/releases/download/v2.0.0/app-release.apk)
+**Direct APK Download:** [app-release.apk](https://github.com/asm2212/unimeal-cafe-app/releases/download/v2.1.0/app-release.apk)
 
 ## 📋 Requirements
 
@@ -167,6 +167,13 @@ This project is licensed under the MIT License.
 - UI inspired by modern design principles
 
 ## 📊 Version History
+
+### v2.1.0 (2025-11-10)
+- 🔔 **Real-time Notifications** - Dashboard now shows new transaction notifications
+- 🔄 **Auto-reload Dashboard** - Dashboard auto-refreshes every 30 seconds
+- 📊 **Enhanced Dashboard** - Improved stats display and insights
+- 🎯 **Better UX** - Notification badge shows count of new transactions
+- ⚡ **Performance** - Optimized transaction checking and loading
 
 ### v2.0.0 (2025-11-10)
 - ✨ **Permanent QR Codes** - QR codes never expire until regenerated

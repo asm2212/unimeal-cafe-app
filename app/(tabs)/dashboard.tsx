@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import {
   View,
   Text,
@@ -12,7 +12,7 @@ import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Colors from '../../constants/Colors';
-import { getCafeDashboard, CafeDashboard } from '../../services/api';
+import { getCafeDashboard, CafeDashboard, getTransactions } from '../../services/api';
 
 export default function DashboardScreen() {
   const router = useRouter();
@@ -20,9 +20,25 @@ export default function DashboardScreen() {
   const [stats, setStats] = useState<CafeDashboard | null>(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [hasNewNotifications, setHasNewNotifications] = useState(false);
+  const [newTransactionCount, setNewTransactionCount] = useState(0);
+  const autoReloadInterval = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     loadDashboard();
+    checkForNewTransactions();
+    
+    // Auto-reload dashboard and transactions every 30 seconds
+    autoReloadInterval.current = setInterval(() => {
+      loadDashboard();
+      checkForNewTransactions();
+    }, 30000);
+    
+    return () => {
+      if (autoReloadInterval.current) {
+        clearInterval(autoReloadInterval.current);
+      }
+    };
   }, []);
 
   const loadDashboard = async () => {
@@ -39,11 +55,51 @@ export default function DashboardScreen() {
     }
   };
 
+  const checkForNewTransactions = async () => {
+    try {
+      const transactions = await getTransactions();
+      // Get the last time the user viewed transactions
+      const lastViewedStr = await AsyncStorage.getItem('lastTransactionView');
+      const lastViewed = lastViewedStr ? new Date(lastViewedStr) : new Date(0);
+      
+      let transactionsArray: any[] = [];
+      
+      if (Array.isArray(transactions)) {
+        transactionsArray = transactions;
+      } else if (transactions && Array.isArray(transactions.transactions)) {
+        transactionsArray = transactions.transactions;
+      } else if (transactions && transactions.data && Array.isArray(transactions.data)) {
+        transactionsArray = transactions.data;
+      }
+      
+      // Count transactions that occurred after the last view
+      const newTransactions = transactionsArray.filter((t: any) => {
+        const transactionDate = new Date(t.timestamp || t.createdAt);
+        return transactionDate > lastViewed;
+      });
+      
+      const count = newTransactions.length;
+      setHasNewNotifications(count > 0);
+      setNewTransactionCount(count);
+    } catch (error) {
+      console.error('Error checking for new transactions:', error);
+    }
+  };
+
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
     await loadDashboard();
+    await checkForNewTransactions();
     setRefreshing(false);
   }, []);
+
+  const handleNotificationPress = async () => {
+    // Mark transactions as viewed
+    await AsyncStorage.setItem('lastTransactionView', new Date().toISOString());
+    setHasNewNotifications(false);
+    setNewTransactionCount(0);
+    router.push('/(tabs)/transactions');
+  };
 
   if (loading) {
     return (
@@ -61,8 +117,13 @@ export default function DashboardScreen() {
           <Text style={styles.greeting}>Welcome back!</Text>
           <Text style={styles.cafeName}>{cafeName}</Text>
         </View>
-        <TouchableOpacity style={styles.notificationButton}>
-          <Ionicons name="notifications-outline" size={24} color={Colors.text} />
+        <TouchableOpacity style={styles.notificationButton} onPress={handleNotificationPress}>
+          <Ionicons name="notifications-outline" size={24} color={Colors.primary} />
+          {hasNewNotifications && (
+            <View style={styles.notificationBadge}>
+              <Text style={styles.notificationCount}>{newTransactionCount}</Text>
+            </View>
+          )}
         </TouchableOpacity>
       </View>
 
@@ -223,6 +284,26 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.orange[50],
     justifyContent: 'center',
     alignItems: 'center',
+    position: 'relative',
+  },
+  notificationBadge: {
+    position: 'absolute',
+    top: -2,
+    right: -2,
+    backgroundColor: '#EF4444',
+    borderRadius: 10,
+    minWidth: 20,
+    height: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 5,
+    borderWidth: 2,
+    borderColor: Colors.white,
+  },
+  notificationCount: {
+    color: Colors.white,
+    fontSize: 11,
+    fontWeight: 'bold',
   },
   scrollView: {
     flex: 1,

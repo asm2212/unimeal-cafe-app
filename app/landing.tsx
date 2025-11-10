@@ -29,10 +29,6 @@ export default function LandingScreen() {
             <Text style={styles.featureText}>Manage Students</Text>
           </View>
           <View style={styles.feature}>
-            <Ionicons name="qr-code" size={24} color={Colors.white} />
-            <Text style={styles.featureText}>Scan QR Codes</Text>
-          </View>
-          <View style={styles.feature}>
             <Ionicons name="stats-chart" size={24} color={Colors.white} />
             <Text style={styles.featureText}>Track Revenue</Text>
           </View>

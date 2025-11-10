@@ -9,6 +9,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Colors from '../../constants/Colors';
 import { getTransactions, Transaction } from '../../services/api';
 
@@ -28,7 +29,17 @@ export default function TransactionsScreen() {
 
   useEffect(() => {
     loadTransactions();
+    // Mark transactions as viewed when screen is opened
+    markTransactionsAsViewed();
   }, []);
+
+  const markTransactionsAsViewed = async () => {
+    try {
+      await AsyncStorage.setItem('lastTransactionView', new Date().toISOString());
+    } catch (error) {
+      console.error('Error marking transactions as viewed:', error);
+    }
+  };
 
   useEffect(() => {
     filterTransactions();
@@ -336,6 +347,7 @@ const styles = StyleSheet.create({
   listContainer: {
     padding: 20,
     paddingTop: 0,
+    paddingBottom: 100,
   },
   transactionCard: {
     flexDirection: 'row',

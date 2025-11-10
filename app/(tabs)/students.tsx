@@ -173,10 +173,10 @@ export default function StudentsScreen() {
         <View style={styles.statItem}>
           <Text style={styles.statValue}>
             Birr {Array.isArray(students) && students.length > 0 
-              ? (students.reduce((sum, s) => sum + s.balance, 0) / students.length).toFixed(0)
+              ? (students.reduce((sum, s) => sum + s.balance, 0)).toFixed(0)
               : '0'}
           </Text>
-          <Text style={styles.statLabel}>Avg Balance</Text>
+          <Text style={styles.statLabel}>Total Balance</Text>
         </View>
       </View>
 
@@ -309,6 +309,7 @@ const styles = StyleSheet.create({
   listContainer: {
     padding: 20,
     paddingTop: 16,
+    paddingBottom: 100,
   },
   studentCard: {
     flexDirection: 'row',

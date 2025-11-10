@@ -90,7 +90,7 @@ export default function QRCodeScreen() {
       if (qrResponse.qrData) {
         setQrValue(qrResponse.qrData);
         animateQRCode();
-        Alert.alert('Success', 'QR Code regenerated successfully! This QR code is permanent until you regenerate a new one.');
+        // No success message - just regenerate silently
       } else {
         Alert.alert('Error', 'Failed to generate QR code data');
       }
@@ -102,6 +102,9 @@ export default function QRCodeScreen() {
 
   const regenerateQR = async () => {
     setGenerating(true);
+    // Reset animations for regeneration
+    fadeAnim.setValue(0);
+    scaleAnim.setValue(0.8);
     try {
       if (cafeInfo.id) {
         await generateNewQR(cafeInfo.id);
@@ -193,13 +196,6 @@ export default function QRCodeScreen() {
       {/* Header */}
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Cafe QR Code</Text>
-        <Text style={styles.headerSubtitle}>
-          Students scan this code to register and order at your cafe
-        </Text>
-        <View style={styles.permanentBadge}>
-          <Ionicons name="shield-checkmark" size={16} color={Colors.success} />
-          <Text style={styles.permanentText}>Permanent QR Code</Text>
-        </View>
       </View>
 
       {/* QR Section */}
@@ -232,17 +228,21 @@ export default function QRCodeScreen() {
             </View>
           )}
         </View>
-        <View style={styles.cafeInfo}>
-          <Text style={styles.cafeName}>{cafeInfo.name}</Text>
-          <Text style={styles.cafeId}>ID: {cafeInfo.id}</Text>
-        </View>
       </Animated.View>
 
       {/* Info Card */}
       <View style={styles.infoCard}>
-        <Ionicons name="information-circle" size={24} color={Colors.primary} />
+        <Ionicons name="shield-checkmark" size={24} color={Colors.success} />
         <Text style={styles.infoText}>
-          This QR code is permanent and will not expire. Regenerate only when needed for security purposes.
+          This QR code is permanent and will never expire. Students can scan it anytime to access your cafe.
+        </Text>
+      </View>
+
+      {/* Security Info Card */}
+      <View style={styles.securityCard}>
+        <Ionicons name="information-circle" size={20} color={Colors.primary} />
+        <Text style={styles.securityText}>
+          For security purposes, you can regenerate the QR code at any time. The old QR code will become invalid.
         </Text>
       </View>
 
@@ -284,36 +284,13 @@ const styles = StyleSheet.create({
   header: { 
     padding: 20, 
     paddingTop: 60, 
-    paddingBottom: 30,
+    paddingBottom: 20,
     backgroundColor: Colors.primary 
   },
   headerTitle: { 
     fontSize: 28, 
     fontWeight: 'bold', 
     color: Colors.white,
-    marginBottom: 8,
-  },
-  headerSubtitle: { 
-    fontSize: 15, 
-    color: Colors.white, 
-    opacity: 0.9,
-    lineHeight: 22,
-  },
-  permanentBadge: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 20,
-    marginTop: 12,
-    alignSelf: 'flex-start',
-    gap: 6,
-  },
-  permanentText: {
-    color: Colors.white,
-    fontSize: 13,
-    fontWeight: '600',
   },
   qrCard: {
     backgroundColor: Colors.white,
@@ -345,30 +322,15 @@ const styles = StyleSheet.create({
     fontSize: 16, 
     color: Colors.gray[600] 
   },
-  cafeInfo: { 
-    alignItems: 'center',
-    marginTop: 8,
-  },
-  cafeName: { 
-    fontSize: 22, 
-    fontWeight: 'bold', 
-    color: Colors.text,
-    marginBottom: 4,
-  },
-  cafeId: { 
-    fontSize: 14, 
-    color: Colors.gray[600],
-    fontWeight: '500',
-  },
   infoCard: {
     flexDirection: 'row',
-    backgroundColor: Colors.orange[50],
+    backgroundColor: Colors.success + '15',
     marginHorizontal: 20,
     marginTop: 16,
     padding: 16,
     borderRadius: 12,
     borderLeftWidth: 4,
-    borderLeftColor: Colors.primary,
+    borderLeftColor: Colors.success,
     gap: 12,
   },
   infoText: {
@@ -376,6 +338,23 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: Colors.gray[700],
     lineHeight: 20,
+  },
+  securityCard: {
+    flexDirection: 'row',
+    backgroundColor: Colors.orange[50],
+    marginHorizontal: 20,
+    marginTop: 12,
+    padding: 14,
+    borderRadius: 12,
+    borderLeftWidth: 4,
+    borderLeftColor: Colors.primary,
+    gap: 10,
+  },
+  securityText: {
+    flex: 1,
+    fontSize: 13,
+    color: Colors.gray[600],
+    lineHeight: 18,
   },
   actionButtons: { 
     flexDirection: 'row', 
