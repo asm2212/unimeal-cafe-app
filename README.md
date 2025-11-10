@@ -40,7 +40,38 @@ Digital cafeteria management system for cafe owners. Manage students, process tr
    - Go to Settings → Security
    - Enable "Install from Unknown Sources"
 3. **Install** the downloaded APK
-4. **Login** with your cafe owner credentials
+4. **Grant Notification Permissions** when prompted (Required for instant alerts!)
+5. **Login** with your cafe owner credentials
+
+## 🔔 How to Use New Notification Features
+
+### **Automatic Setup (No Configuration Needed!)**
+When you open the app:
+1. App will ask for notification permissions → **Tap "Allow"**
+2. Notifications start working automatically
+3. That's it! You'll now receive instant alerts
+
+### **What You'll Get**
+- **Instant Alerts**: Get notified within 5 seconds when a transaction happens
+- **Sound & Vibration**: Your phone will alert you just like receiving an SMS
+- **Transaction Details**: See student name and amount immediately
+- **Badge Count**: Red badge on notification bell shows unread transactions
+
+### **How It Works**
+1. Student makes a purchase
+2. Within 5 seconds, you get a notification:
+   ```
+   💰 New Transaction
+   John Doe - -Birr 50.00
+   ```
+3. Tap notification → Opens transaction details
+4. Badge count clears when you view transactions
+
+### **Tips**
+- Keep app running in background for best results
+- Make sure notifications are enabled in device settings
+- Check notification bell icon for unread count
+- Tap bell icon to view all transactions
 
 ## 📱 Screenshots
 
