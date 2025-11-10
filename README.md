@@ -2,12 +2,13 @@
 
 Digital cafeteria management system for cafe owners. Manage students, process transactions, and track revenue efficiently.
 
-![Version](https://img.shields.io/badge/version-2.1.0-orange)
+![Version](https://img.shields.io/badge/version-2.2.0-orange)
 ![Platform](https://img.shields.io/badge/platform-Android-green)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 
 ## ✨ Features
 
+- 🔔 **Real-Time Notifications** - SMS-like instant alerts for new transactions (5-second delivery!)
 - 👥 **Student Management** - Register and manage students with ease
 - 🔍 **Permanent QR Code System** - Generate permanent QR codes that never expire
 - 💰 **Transaction Processing** - Process meal transactions instantly
@@ -20,9 +21,9 @@ Digital cafeteria management system for cafe owners. Manage students, process tr
 
 ## 📥 Download
 
-**Latest Release:** [v2.1.0](https://github.com/asm2212/unimeal-cafe-app/releases/latest)
+**Latest Release:** [v2.2.0](https://github.com/asm2212/unimeal-cafe-app/releases/latest)
 
-**Direct APK Download:** [unimeal-cafe-v2.1.0.apk](https://github.com/asm2212/unimeal-cafe-app/releases/download/v2.1.0/unimeal-cafe-v2.1.0.apk)
+**Direct APK Download:** [unimeal-cafe-v2.2.0.apk](https://github.com/asm2212/unimeal-cafe-app/releases/download/v2.2.0/unimeal-cafe-v2.2.0.apk)
 
 ## 📋 Requirements
 
@@ -168,6 +169,16 @@ This project is licensed under the MIT License.
 - UI inspired by modern design principles
 
 ## 📊 Version History
+
+### v2.2.0 (2025-11-10)
+- 🔔 **SMS-Like Instant Notifications** - Receive transaction alerts within 5 seconds
+- 📱 **Sound & Vibration** - Full sensory feedback for new transactions
+- 🎯 **Smart Polling** - Checks for new transactions every 5 seconds
+- 🧪 **Test Notifications** - Built-in test screen to verify notifications work
+- 💰 **Transaction Details** - Shows student name and amount in notifications
+- 🔊 **Tap to View** - Tap notification to open transaction details
+- 📊 **Badge Counts** - Visual indicator of unread transactions
+- ⚡ **Optimized** - Battery-efficient polling mechanism
 
 ### v2.1.0 (2025-11-10)
 - 🔔 **Real-time Notifications** - Dashboard now shows new transaction notifications

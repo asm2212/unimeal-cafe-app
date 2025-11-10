@@ -259,14 +259,12 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.unimeal.cafe";
-				PRODUCT_NAME = "UniMealCafe";
+				PRODUCT_BUNDLE_IDENTIFIER = org.name.UniMealCafe;
+				PRODUCT_NAME = UniMealCafe;
 				SWIFT_OBJC_BRIDGING_HEADER = "UniMealCafe/UniMealCafe-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
-				TARGETED_DEVICE_FAMILY = "1,2";
-				CODE_SIGN_ENTITLEMENTS = UniMealCafe/UniMealCafe.entitlements;
 			};
 			name = Debug;
 		};
@@ -288,13 +286,11 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.unimeal.cafe";
-				PRODUCT_NAME = "UniMealCafe";
+				PRODUCT_BUNDLE_IDENTIFIER = org.name.UniMealCafe;
+				PRODUCT_NAME = UniMealCafe;
 				SWIFT_OBJC_BRIDGING_HEADER = "UniMealCafe/UniMealCafe-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
-				TARGETED_DEVICE_FAMILY = "1,2";
-				CODE_SIGN_ENTITLEMENTS = UniMealCafe/UniMealCafe.entitlements;
 			};
 			name = Release;
 		};

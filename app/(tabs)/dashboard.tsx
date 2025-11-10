@@ -7,12 +7,16 @@ import {
   RefreshControl,
   TouchableOpacity,
   ActivityIndicator,
+  Alert,
 } from 'react-native';
-import { useRouter } from 'expo-router';
+import { useRouter, useFocusEffect } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Notifications from 'expo-notifications';
 import Colors from '../../constants/Colors';
 import { getCafeDashboard, CafeDashboard, getTransactions } from '../../services/api';
+import notificationService from '../../services/notificationService';
+import transactionPollingService from '../../services/transactionPollingService';
 
 export default function DashboardScreen() {
   const router = useRouter();
@@ -22,13 +26,15 @@ export default function DashboardScreen() {
   const [refreshing, setRefreshing] = useState(false);
   const [hasNewNotifications, setHasNewNotifications] = useState(false);
   const [newTransactionCount, setNewTransactionCount] = useState(0);
-  const autoReloadInterval = useRef<NodeJS.Timeout | null>(null);
+  const [notificationsEnabled, setNotificationsEnabled] = useState(false);
+  const autoReloadInterval = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
+    initializeNotifications();
     loadDashboard();
     checkForNewTransactions();
     
-    // Auto-reload dashboard and transactions every 30 seconds
+    // Auto-reload dashboard every 30 seconds
     autoReloadInterval.current = setInterval(() => {
       loadDashboard();
       checkForNewTransactions();
@@ -38,8 +44,65 @@ export default function DashboardScreen() {
       if (autoReloadInterval.current) {
         clearInterval(autoReloadInterval.current);
       }
+      // Stop polling when component unmounts
+      transactionPollingService.stopPolling();
+      notificationService.removeListeners();
     };
   }, []);
+
+  // Handle screen focus to restart polling
+  useFocusEffect(
+    useCallback(() => {
+      if (notificationsEnabled) {
+        transactionPollingService.startPolling();
+      }
+      checkForNewTransactions();
+      
+      return () => {
+        // Keep polling running even when screen loses focus
+        // Only stop when app is closed
+      };
+    }, [notificationsEnabled])
+  );
+
+  const initializeNotifications = async () => {
+    try {
+      // Request notification permissions
+      const hasPermission = await notificationService.requestPermissions();
+      setNotificationsEnabled(hasPermission);
+
+      if (hasPermission) {
+        // Setup notification channel for Android
+        await notificationService.setupNotificationChannel();
+
+        // Setup notification listeners
+        notificationService.setupListeners(
+          (notification) => {
+            console.log('Notification received in dashboard:', notification);
+            // Update badge count
+            checkForNewTransactions();
+          },
+          (response) => {
+            console.log('Notification tapped:', response);
+            // Navigate to transactions when notification is tapped
+            router.push('/(tabs)/transactions');
+          }
+        );
+
+        // Start polling for new transactions
+        await transactionPollingService.startPolling();
+        console.log('Real-time transaction notifications enabled');
+      } else {
+        Alert.alert(
+          'Notifications Disabled',
+          'Enable notifications in your device settings to receive real-time transaction alerts.',
+          [{ text: 'OK' }]
+        );
+      }
+    } catch (error) {
+      console.error('Error initializing notifications:', error);
+    }
+  };
 
   const loadDashboard = async () => {
     try {
@@ -98,6 +161,8 @@ export default function DashboardScreen() {
     await AsyncStorage.setItem('lastTransactionView', new Date().toISOString());
     setHasNewNotifications(false);
     setNewTransactionCount(0);
+    // Clear badge count
+    await notificationService.clearBadgeCount();
     router.push('/(tabs)/transactions');
   };
 
@@ -211,6 +276,16 @@ export default function DashboardScreen() {
                 <Ionicons name="qr-code" size={24} color={Colors.primary} />
               </View>
               <Text style={styles.actionText}>Cafe QR Code</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.actionCard}
+              onPress={() => router.push('/test-notifications')}
+            >
+              <View style={[styles.actionIcon, { backgroundColor: Colors.orange[100] }]}>
+                <Ionicons name="flask" size={24} color={Colors.primary} />
+              </View>
+              <Text style={styles.actionText}>Test Notifications</Text>
             </TouchableOpacity>
           </View>
         </View>
