@@ -2,11 +2,16 @@
   "expo": {
     "name": "UniMeal Cafe",
     "slug": "unimeal-cafe-app",
-    "version": "1.0.3",
+    "version": "2.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
     "scheme": "unimeal-cafe",
     "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
     "extra": {
       "API_URL": "https://unimeal-backend.duckdns.org",
       "router": {},
@@ -21,6 +26,10 @@
     "android": {
       "package": "com.unimeal.cafe",
       "minSdkVersion": 24,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
       "permissions": [
         "android.permission.CAMERA",
         "android.permission.READ_MEDIA_IMAGES",

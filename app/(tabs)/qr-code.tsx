@@ -7,16 +7,12 @@ import {
   TouchableOpacity,
   Alert,
   ActivityIndicator,
-  Share,
   Dimensions,
-  Platform,
-  Linking,
+  Animated,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import QRCode from 'react-native-qrcode-svg';
-import * as FileSystem from 'expo-file-system/legacy';
-import * as MediaLibrary from 'expo-media-library';
 import * as Print from 'expo-print';
 import Colors from '../../constants/Colors';
 import { getCafeQR, generateCafeQR } from '../../services/api';
@@ -30,6 +26,8 @@ export default function QRCodeScreen() {
   const [cafeInfo, setCafeInfo] = useState({ id: '', name: '' });
   const [qrValue, setQrValue] = useState('');
   const qrRef = useRef<any>(null);
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const scaleAnim = useRef(new Animated.Value(0.8)).current;
 
   useEffect(() => {
     loadCafeInfo();
@@ -58,6 +56,7 @@ export default function QRCodeScreen() {
       // Use qrData (encrypted string) as the QR code value
       if (qrResponse.qrData) {
         setQrValue(qrResponse.qrData);
+        animateQRCode();
       } else {
         // If qrData is not available, generate new
         await generateNewQR(cafeId);
@@ -69,12 +68,29 @@ export default function QRCodeScreen() {
     }
   };
 
+  const animateQRCode = () => {
+    Animated.parallel([
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 600,
+        useNativeDriver: true,
+      }),
+      Animated.spring(scaleAnim, {
+        toValue: 1,
+        friction: 4,
+        tension: 40,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  };
+
   const generateNewQR = async (cafeId: string) => {
     try {
       const qrResponse = await generateCafeQR(cafeId);
       if (qrResponse.qrData) {
         setQrValue(qrResponse.qrData);
-        Alert.alert('Success', 'QR Code generated successfully!');
+        animateQRCode();
+        Alert.alert('Success', 'QR Code regenerated successfully! This QR code is permanent until you regenerate a new one.');
       } else {
         Alert.alert('Error', 'Failed to generate QR code data');
       }
@@ -98,64 +114,6 @@ export default function QRCodeScreen() {
     }
   };
 
-  // ✅ Fixed MediaLibrary permissions for Expo SDK 51+
-  const downloadQR = async () => {
-    try {
-      if (!qrRef.current) {
-        Alert.alert('Error', 'QR Code not ready for download');
-        return;
-      }
-
-      // Request gallery permission (false = only photos/videos, no audio)
-      const { status } = await MediaLibrary.requestPermissionsAsync(false);
-      if (status !== 'granted') {
-        Alert.alert(
-          'Permission Required',
-          'Please allow gallery access to save QR codes.',
-          [
-            { text: 'Cancel', style: 'cancel' },
-            {
-              text: 'Open Settings',
-              onPress: () => Platform.OS === 'android' && Linking.openSettings(),
-            },
-          ]
-        );
-        return;
-      }
-
-      qrRef.current.toDataURL(async (dataURL: string) => {
-        try {
-          if (!dataURL) {
-            Alert.alert('Error', 'Failed to generate QR code image');
-            return;
-          }
-
-          const filename = `${cafeInfo.name.replace(/[^a-zA-Z0-9]/g, '_')}_QR_${Date.now()}.png`;
-          const fileUri = FileSystem.documentDirectory + filename;
-
-          // Extract base64 data from data URL
-          const base64Data = dataURL.includes('base64,') 
-            ? dataURL.split('base64,')[1] 
-            : dataURL;
-
-          await FileSystem.writeAsStringAsync(fileUri, base64Data, {
-            encoding: FileSystem.EncodingType.Base64,
-          });
-
-          const asset = await MediaLibrary.createAssetAsync(fileUri);
-          await MediaLibrary.createAlbumAsync('UniMeal', asset, false);
-          
-          Alert.alert('Success', 'QR Code saved to your gallery!');
-        } catch (saveError) {
-          console.error('Save error:', saveError);
-          Alert.alert('Error', 'Failed to save QR code. Please try again.');
-        }
-      });
-    } catch (error) {
-      console.error('Download error:', error);
-      Alert.alert('Error', 'Failed to download QR code. Please check permissions.');
-    }
-  };
 
   const printQR = async () => {
     try {
@@ -184,82 +142,31 @@ export default function QRCodeScreen() {
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
                 <style>
                   @page {
-                    margin: 2cm;
+                    margin: 0;
+                    size: auto;
                   }
                   body { 
-                    text-align: center; 
-                    font-family: Arial, sans-serif; 
-                    margin: 0; 
-                    padding: 20px;
+                    margin: 0;
+                    padding: 0;
                     display: flex;
-                    flex-direction: column;
                     align-items: center;
                     justify-content: center;
-                  }
-                  .container {
-                    max-width: 600px;
-                    margin: 0 auto;
-                  }
-                  .title { 
-                    font-size: 28px; 
-                    font-weight: bold; 
-                    color: #f97316; 
-                    margin-bottom: 10px;
-                  }
-                  .subtitle {
-                    font-size: 18px;
-                    color: #333;
-                    margin-bottom: 30px;
-                  }
-                  .qr-wrapper {
-                    background: #f9fafb;
-                    padding: 30px;
-                    border-radius: 12px;
-                    margin: 20px 0;
-                    display: inline-block;
+                    min-height: 100vh;
                   }
                   .qr { 
-                    width: 300px; 
-                    height: 300px; 
+                    width: 400px; 
+                    height: 400px; 
                     display: block;
-                  }
-                  .footer {
-                    font-size: 14px;
-                    color: #666;
-                    margin-top: 20px;
-                  }
-                  .instructions {
-                    font-size: 16px;
-                    color: #555;
-                    margin-top: 20px;
-                    line-height: 1.6;
                   }
                 </style>
               </head>
               <body>
-                <div class="container">
-                  <div class="title">${cafeInfo.name}</div>
-                  <div class="subtitle">UniMeal Cafe QR Code</div>
-                  <div class="qr-wrapper">
-                    <img src="${imageData}" class="qr" alt="QR Code" />
-                  </div>
-                  <div class="instructions">
-                    <strong>How to use:</strong><br/>
-                    Students scan this QR code to register and order meals at your cafe
-                  </div>
-                  <div class="footer">
-                    Generated on ${new Date().toLocaleDateString()} at ${new Date().toLocaleTimeString()}
-                  </div>
-                </div>
+                <img src="${imageData}" class="qr" alt="QR Code" />
               </body>
             </html>
           `;
           
-          await Print.printAsync({ 
-            html,
-            width: 612,
-            height: 792,
-          });
+          await Print.printAsync({ html });
         } catch (printError) {
           console.error('Print processing error:', printError);
           Alert.alert('Error', 'Failed to process QR code for printing.');
@@ -271,16 +178,6 @@ export default function QRCodeScreen() {
     }
   };
 
-  const shareQR = async () => {
-    try {
-      await Share.share({
-        message: `Scan this QR code to order meals at ${cafeInfo.name}`,
-        title: 'UniMeal Cafe QR Code',
-      });
-    } catch (error) {
-      console.error('Share error:', error);
-    }
-  };
 
   if (loading) {
     return (
@@ -299,10 +196,22 @@ export default function QRCodeScreen() {
         <Text style={styles.headerSubtitle}>
           Students scan this code to register and order at your cafe
         </Text>
+        <View style={styles.permanentBadge}>
+          <Ionicons name="shield-checkmark" size={16} color={Colors.success} />
+          <Text style={styles.permanentText}>Permanent QR Code</Text>
+        </View>
       </View>
 
       {/* QR Section */}
-      <View style={styles.qrCard}>
+      <Animated.View 
+        style={[
+          styles.qrCard,
+          {
+            opacity: fadeAnim,
+            transform: [{ scale: scaleAnim }],
+          },
+        ]}
+      >
         <View style={styles.qrContainer}>
           {generating ? (
             <View style={styles.generatingContainer}>
@@ -327,28 +236,29 @@ export default function QRCodeScreen() {
           <Text style={styles.cafeName}>{cafeInfo.name}</Text>
           <Text style={styles.cafeId}>ID: {cafeInfo.id}</Text>
         </View>
+      </Animated.View>
+
+      {/* Info Card */}
+      <View style={styles.infoCard}>
+        <Ionicons name="information-circle" size={24} color={Colors.primary} />
+        <Text style={styles.infoText}>
+          This QR code is permanent and will not expire. Regenerate only when needed for security purposes.
+        </Text>
       </View>
 
       {/* Action Buttons */}
       <View style={styles.actionButtons}>
-        <TouchableOpacity style={styles.primaryButton} onPress={regenerateQR}>
-          <Ionicons name="refresh" size={20} color={Colors.white} />
-          <Text style={styles.primaryButtonText}>Regenerate</Text>
+        <TouchableOpacity 
+          style={styles.primaryButton} 
+          onPress={regenerateQR}
+          disabled={generating}
+        >
+          <Ionicons name="refresh" size={22} color={Colors.white} />
+          <Text style={styles.primaryButtonText}>Regenerate QR</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.secondaryButton} onPress={downloadQR}>
-          <Ionicons name="download" size={20} color={Colors.primary} />
-          <Text style={styles.secondaryButtonText}>Download</Text>
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.actionButtons}>
         <TouchableOpacity style={styles.secondaryButton} onPress={printQR}>
-          <Ionicons name="print" size={20} color={Colors.primary} />
-          <Text style={styles.secondaryButtonText}>Print</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.secondaryButton} onPress={shareQR}>
-          <Ionicons name="share" size={20} color={Colors.primary} />
-          <Text style={styles.secondaryButtonText}>Share</Text>
+          <Ionicons name="print" size={22} color={Colors.primary} />
+          <Text style={styles.secondaryButtonText}>Print QR</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
@@ -356,59 +266,158 @@ export default function QRCodeScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: Colors.background },
+  container: { 
+    flex: 1, 
+    backgroundColor: Colors.background 
+  },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: Colors.background,
   },
-  loadingText: { marginTop: 10, fontSize: 16, color: Colors.gray[600] },
-  header: { padding: 20, paddingTop: 60, backgroundColor: Colors.primary },
-  headerTitle: { fontSize: 24, fontWeight: 'bold', color: Colors.white },
-  headerSubtitle: { fontSize: 15, color: Colors.white, opacity: 0.9 },
+  loadingText: { 
+    marginTop: 10, 
+    fontSize: 16, 
+    color: Colors.gray[600] 
+  },
+  header: { 
+    padding: 20, 
+    paddingTop: 60, 
+    paddingBottom: 30,
+    backgroundColor: Colors.primary 
+  },
+  headerTitle: { 
+    fontSize: 28, 
+    fontWeight: 'bold', 
+    color: Colors.white,
+    marginBottom: 8,
+  },
+  headerSubtitle: { 
+    fontSize: 15, 
+    color: Colors.white, 
+    opacity: 0.9,
+    lineHeight: 22,
+  },
+  permanentBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 20,
+    marginTop: 12,
+    alignSelf: 'flex-start',
+    gap: 6,
+  },
+  permanentText: {
+    color: Colors.white,
+    fontSize: 13,
+    fontWeight: '600',
+  },
   qrCard: {
     backgroundColor: Colors.white,
-    margin: 20,
-    borderRadius: 12,
-    padding: 30,
+    marginHorizontal: 20,
+    marginTop: 20,
+    borderRadius: 16,
+    padding: width < 380 ? 20 : 30,
     alignItems: 'center',
     elevation: 4,
+    shadowColor: Colors.black,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
   },
   qrContainer: {
-    padding: 20,
+    padding: width < 380 ? 15 : 20,
     backgroundColor: Colors.gray[50],
-    borderRadius: 12,
+    borderRadius: 16,
     marginBottom: 20,
   },
-  generatingContainer: { width: 200, height: 200, justifyContent: 'center', alignItems: 'center' },
-  generatingText: { marginTop: 10, fontSize: 16, color: Colors.gray[600] },
-  cafeInfo: { alignItems: 'center' },
-  cafeName: { fontSize: 20, fontWeight: 'bold', color: Colors.text },
-  cafeId: { fontSize: 14, color: Colors.gray[600] },
-  actionButtons: { flexDirection: 'row', padding: 20, gap: 10 },
+  generatingContainer: { 
+    width: QR_SIZE, 
+    height: QR_SIZE, 
+    justifyContent: 'center', 
+    alignItems: 'center' 
+  },
+  generatingText: { 
+    marginTop: 10, 
+    fontSize: 16, 
+    color: Colors.gray[600] 
+  },
+  cafeInfo: { 
+    alignItems: 'center',
+    marginTop: 8,
+  },
+  cafeName: { 
+    fontSize: 22, 
+    fontWeight: 'bold', 
+    color: Colors.text,
+    marginBottom: 4,
+  },
+  cafeId: { 
+    fontSize: 14, 
+    color: Colors.gray[600],
+    fontWeight: '500',
+  },
+  infoCard: {
+    flexDirection: 'row',
+    backgroundColor: Colors.orange[50],
+    marginHorizontal: 20,
+    marginTop: 16,
+    padding: 16,
+    borderRadius: 12,
+    borderLeftWidth: 4,
+    borderLeftColor: Colors.primary,
+    gap: 12,
+  },
+  infoText: {
+    flex: 1,
+    fontSize: 14,
+    color: Colors.gray[700],
+    lineHeight: 20,
+  },
+  actionButtons: { 
+    flexDirection: 'row', 
+    paddingHorizontal: 20,
+    paddingVertical: 20,
+    gap: 12,
+  },
   primaryButton: {
     flex: 1,
     backgroundColor: Colors.primary,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: 15,
-    borderRadius: 8,
+    paddingVertical: 16,
+    borderRadius: 12,
     gap: 8,
+    elevation: 2,
+    shadowColor: Colors.primary,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
   },
-  primaryButtonText: { color: Colors.white, fontSize: 16, fontWeight: '600' },
+  primaryButtonText: { 
+    color: Colors.white, 
+    fontSize: 16, 
+    fontWeight: '600' 
+  },
   secondaryButton: {
     flex: 1,
     backgroundColor: Colors.white,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: 15,
-    borderRadius: 8,
-    borderWidth: 1,
+    paddingVertical: 16,
+    borderRadius: 12,
+    borderWidth: 2,
     borderColor: Colors.primary,
     gap: 8,
   },
-  secondaryButtonText: { color: Colors.primary, fontSize: 16, fontWeight: '600' },
+  secondaryButtonText: { 
+    color: Colors.primary, 
+    fontSize: 16, 
+    fontWeight: '600' 
+  },
 });

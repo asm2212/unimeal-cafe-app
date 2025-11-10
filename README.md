@@ -2,25 +2,27 @@
 
 Digital cafeteria management system for cafe owners. Manage students, process transactions, and track revenue efficiently.
 
-![Version](https://img.shields.io/badge/version-1.0.0-orange)
+![Version](https://img.shields.io/badge/version-2.0.0-orange)
 ![Platform](https://img.shields.io/badge/platform-Android-green)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 
 ## ✨ Features
 
 - 👥 **Student Management** - Register and manage students with ease
-- 🔍 **QR Code System** - Generate and scan QR codes for quick identification
+- 🔍 **Permanent QR Code System** - Generate permanent QR codes that never expire
 - 💰 **Transaction Processing** - Process meal transactions instantly
 - 💳 **Balance Management** - Manage student balances and top-ups
 - 📊 **Revenue Tracking** - Track daily, weekly, and monthly revenue
 - 📜 **Transaction History** - Complete transaction history with filters
-- 🎨 **Beautiful UI** - Modern orange-themed interface
+- 🖨️ **Print QR Codes** - Print QR codes directly without extra text
+- 🎨 **Beautiful UI** - Modern orange-themed interface with smooth animations
+- 📱 **Fully Responsive** - Optimized for all screen sizes
 
 ## 📥 Download
 
-**Latest Release:** [v1.0.0](https://github.com/asm2212/unimeal-cafe-app/releases/latest)
+**Latest Release:** [v2.0.0](https://github.com/asm2212/unimeal-cafe-app/releases/latest)
 
-**Direct APK Download:** [app-release.apk](https://github.com/asm2212/unimeal-cafe-app/releases/download/v1.0.0/app-release.apk) (86 MB)
+**Direct APK Download:** [app-release.apk](https://github.com/asm2212/unimeal-cafe-app/releases/download/v2.0.0/app-release.apk)
 
 ## 📋 Requirements
 
@@ -38,8 +40,6 @@ Digital cafeteria management system for cafe owners. Manage students, process tr
    - Enable "Install from Unknown Sources"
 3. **Install** the downloaded APK
 4. **Login** with your cafe owner credentials
-
-📖 **Detailed Guide:** [Installation Guide for Cafe Owners](INSTALLATION_GUIDE_FOR_CAFE_OWNERS.md)
 
 ## 📱 Screenshots
 
@@ -137,12 +137,6 @@ cd android
 
 APK will be generated at: `android/app/build/outputs/apk/release/app-release.apk`
 
-## 📚 Documentation
-
-- [Installation Guide for Cafe Owners](INSTALLATION_GUIDE_FOR_CAFE_OWNERS.md)
-- [Deployment Guide](DEPLOYMENT_GUIDE.md)
-- [Quick Start Deployment](QUICK_START_DEPLOYMENT.md)
-
 ## 🔄 Updates
 
 To update the app:
@@ -156,8 +150,6 @@ To update the app:
 Need help?
 
 - 📧 **Email:** support@unimeal.com
-- 📱 **WhatsApp:** +251-XXX-XXXX
-- 📖 **Documentation:** [Installation Guide](INSTALLATION_GUIDE_FOR_CAFE_OWNERS.md)
 - 🐛 **Issues:** [GitHub Issues](https://github.com/asm2212/unimeal-cafe-app/issues)
 
 ## 🤝 Contributing
@@ -175,6 +167,15 @@ This project is licensed under the MIT License.
 - UI inspired by modern design principles
 
 ## 📊 Version History
+
+### v2.0.0 (2025-11-10)
+- ✨ **Permanent QR Codes** - QR codes never expire until regenerated
+- 🖨️ **Improved Print** - Print only QR code without extra text
+- 🎨 **Smooth Animations** - Added fade and scale animations for better UX
+- 📱 **Enhanced Responsiveness** - Optimized for all screen sizes
+- 🗑️ **Removed Features** - Removed download and share QR options for simplicity
+- 🧹 **Code Cleanup** - Removed unnecessary documentation files
+- ⚡ **Performance** - Improved app speed and efficiency
 
 ### v1.0.0 (2025-11-06)
 - Initial production release
