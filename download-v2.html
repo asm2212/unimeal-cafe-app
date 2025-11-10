@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download UniMeal Cafe App v2.0.0</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(249, 115, 22, 0.15);
+            max-width: 700px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 50px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .logo {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+        
+        .badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        h1 {
+            color: #f97316;
+            font-size: 42px;
+            margin-bottom: 12px;
+            font-weight: 800;
+        }
+        
+        .version {
+            color: #6b7280;
+            font-size: 20px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+        
+        .description {
+            color: #4b5563;
+            font-size: 17px;
+            line-height: 1.7;
+            margin-bottom: 35px;
+        }
+        
+        .download-section {
+            text-align: center;
+            margin: 40px 0;
+        }
+        
+        .download-btn {
+            background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+            color: white;
+            text-decoration: none;
+            padding: 20px 50px;
+            border-radius: 15px;
+            font-size: 20px;
+            font-weight: 700;
+            display: inline-block;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 20px rgba(249, 115, 22, 0.4);
+        }
+        
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(249, 115, 22, 0.5);
+        }
+        
+        .download-btn:active {
+            transform: translateY(-1px);
+        }
+        
+        .file-size {
+            display: block;
+            margin-top: 15px;
+            color: #9ca3af;
+            font-size: 14px;
+        }
+        
+        .whats-new {
+            margin: 40px 0;
+            padding: 30px;
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            border-radius: 15px;
+            border-left: 5px solid #10b981;
+        }
+        
+        .whats-new h2 {
+            color: #10b981;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        
+        .whats-new ul {
+            list-style: none;
+            color: #374151;
+        }
+        
+        .whats-new li {
+            margin-bottom: 12px;
+            padding-left: 30px;
+            position: relative;
+            line-height: 1.6;
+        }
+        
+        .whats-new li:before {
+            content: "✨";
+            position: absolute;
+            left: 0;
+            font-size: 18px;
+        }
+        
+        .features {
+            margin: 40px 0;
+        }
+        
+        .features h2 {
+            color: #1f2937;
+            margin-bottom: 25px;
+            font-size: 24px;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .feature-item {
+            padding: 20px;
+            background: #f9fafb;
+            border-radius: 12px;
+            border: 2px solid #e5e7eb;
+            transition: all 0.3s ease;
+        }
+        
+        .feature-item:hover {
+            border-color: #f97316;
+            transform: translateY(-2px);
+        }
+        
+        .feature-icon {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        
+        .feature-title {
+            color: #1f2937;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .feature-desc {
+            color: #6b7280;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .info-box {
+            margin: 30px 0;
+            padding: 25px;
+            background: #fff7ed;
+            border-radius: 12px;
+            border-left: 4px solid #f97316;
+        }
+        
+        .info-box h3 {
+            color: #f97316;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        
+        .info-box ul {
+            list-style: none;
+            color: #4b5563;
+            line-height: 1.8;
+        }
+        
+        .info-box li {
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .info-box li:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #f97316;
+            font-weight: bold;
+        }
+        
+        .requirements {
+            margin: 30px 0;
+            padding: 25px;
+            background: #f3f4f6;
+            border-radius: 12px;
+        }
+        
+        .requirements h3 {
+            color: #1f2937;
+            margin-bottom: 15px;
+        }
+        
+        .requirements p {
+            color: #4b5563;
+            line-height: 1.8;
+        }
+        
+        .footer {
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 2px solid #e5e7eb;
+            text-align: center;
+            color: #6b7280;
+        }
+        
+        .github-link {
+            color: #f97316;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+        
+        .github-link:hover {
+            color: #ea580c;
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 640px) {
+            .container {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 32px;
+            }
+            
+            .download-btn {
+                width: 100%;
+                padding: 18px 30px;
+                font-size: 18px;
+            }
+            
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">📱</div>
+            <div class="badge">🎉 Latest Release</div>
+            <h1>UniMeal Cafe</h1>
+            <div class="version">Version 2.0.0 - Production Release</div>
+            <p class="description">
+                Digital cafeteria management system for cafe owners. Manage students, process transactions, 
+                and track revenue efficiently with permanent QR codes, smooth animations, and modern UI.
+            </p>
+        </div>
+
+        <div class="download-section">
+            <a href="https://github.com/asm2212/unimeal-cafe-app/releases/download/v2.0.0/unimeal-cafe-v2.0.0.apk" 
+               class="download-btn" 
+               download>
+                📥 Download APK
+            </a>
+            <span class="file-size">Size: 86 MB | Android 7.0+</span>
+        </div>
+
+        <div class="whats-new">
+            <h2>🆕 What's New in v2.0.0</h2>
+            <ul>
+                <li><strong>Permanent QR Codes</strong> - QR codes never expire until manually regenerated</li>
+                <li><strong>Clean Print</strong> - Print only QR code without extra text</li>
+                <li><strong>Smooth Animations</strong> - Beautiful fade and scale effects</li>
+                <li><strong>Modern UI</strong> - Enhanced design with better spacing and shadows</li>
+                <li><strong>Fully Responsive</strong> - Optimized for all screen sizes</li>
+                <li><strong>Simplified Interface</strong> - Removed download/share for cleaner UX</li>
+            </ul>
+        </div>
+
+        <div class="features">
+            <h2>✨ Key Features</h2>
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">👥</div>
+                    <div class="feature-title">Student Management</div>
+                    <div class="feature-desc">Register and manage students with ease</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🔍</div>
+                    <div class="feature-title">QR Code System</div>
+                    <div class="feature-desc">Generate permanent QR codes</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">💰</div>
+                    <div class="feature-title">Transactions</div>
+                    <div class="feature-desc">Process meals instantly</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">💳</div>
+                    <div class="feature-title">Balance Management</div>
+                    <div class="feature-desc">Manage student balances</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">📊</div>
+                    <div class="feature-title">Revenue Tracking</div>
+                    <div class="feature-desc">Track daily, weekly, monthly</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🖨️</div>
+                    <div class="feature-title">Print QR</div>
+                    <div class="feature-desc">Clean QR code printing</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-box">
+            <h3>📋 Installation Steps</h3>
+            <ul>
+                <li>Download the APK file using the button above</li>
+                <li>Go to Settings → Security on your Android device</li>
+                <li>Enable "Install from Unknown Sources"</li>
+                <li>Open the downloaded APK file</li>
+                <li>Tap "Install" and wait for completion</li>
+                <li>Launch the app and login with your cafe credentials</li>
+            </ul>
+        </div>
+
+        <div class="requirements">
+            <h3>📱 System Requirements</h3>
+            <p>
+                <strong>Android Version:</strong> 7.0 (Nougat) or higher<br>
+                <strong>Storage Space:</strong> At least 200 MB free<br>
+                <strong>Internet:</strong> Required for app functionality<br>
+                <strong>Permissions:</strong> Camera (for QR scanning), Storage (for printing)
+            </p>
+        </div>
+
+        <div class="info-box">
+            <h3>🔄 Upgrading from v1.x</h3>
+            <ul>
+                <li>Download the new v2.0.0 APK</li>
+                <li>Install over your existing app</li>
+                <li>Your data will be preserved automatically</li>
+                <li>Login with your existing credentials</li>
+                <li>Enjoy the new features!</li>
+            </ul>
+        </div>
+
+        <div class="footer">
+            <p>
+                <strong>Open Source Project</strong><br>
+                View on <a href="https://github.com/asm2212/unimeal-cafe-app" class="github-link">GitHub</a> 
+                | Report <a href="https://github.com/asm2212/unimeal-cafe-app/issues" class="github-link">Issues</a>
+            </p>
+            <p style="margin-top: 20px; font-size: 14px;">
+                Made with ❤️ for cafe owners | Released: November 10, 2025
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Track download clicks
+        document.querySelector('.download-btn').addEventListener('click', function() {
+            console.log('UniMeal Cafe v2.0.0 download started');
+        });
+    </script>
+</body>
+</html>
