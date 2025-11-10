@@ -15,20 +15,13 @@ class TransactionPollingService {
    */
   async startPolling() {
     if (this.isPolling) {
-      console.log('Polling already active');
       return;
     }
 
-    console.log('Starting transaction polling...');
     this.isPolling = true;
-
-    // Load the last known transaction timestamp
     await this.loadLastTransactionTimestamp();
-
-    // Initial check
     await this.checkForNewTransactions();
 
-    // Set up interval for continuous polling
     this.pollingInterval = setInterval(async () => {
       await this.checkForNewTransactions();
     }, POLLING_INTERVAL);
@@ -43,7 +36,6 @@ class TransactionPollingService {
       this.pollingInterval = null;
     }
     this.isPolling = false;
-    console.log('Transaction polling stopped');
   }
 
   /**
@@ -54,14 +46,11 @@ class TransactionPollingService {
       const timestamp = await AsyncStorage.getItem(LAST_TRANSACTION_KEY);
       if (timestamp) {
         this.lastTransactionTimestamp = new Date(timestamp);
-        console.log('Loaded last transaction timestamp:', this.lastTransactionTimestamp);
       } else {
-        // If no timestamp exists, use current time to avoid flooding with old notifications
         this.lastTransactionTimestamp = new Date();
         await this.saveLastTransactionTimestamp(this.lastTransactionTimestamp);
       }
     } catch (error) {
-      console.error('Error loading last transaction timestamp:', error);
       this.lastTransactionTimestamp = new Date();
     }
   }
@@ -82,10 +71,8 @@ class TransactionPollingService {
    */
   private async checkForNewTransactions() {
     try {
-      console.log('🔍 Checking for new transactions...');
       const response = await getTransactions();
       
-      // Handle different response formats
       let transactionsArray: Transaction[] = [];
       if (Array.isArray(response)) {
         transactionsArray = response;
@@ -95,25 +82,18 @@ class TransactionPollingService {
         transactionsArray = response.data;
       }
 
-      console.log(`📊 Total transactions in system: ${transactionsArray.length}`);
-
       if (transactionsArray.length === 0) {
-        console.log('⚠️ No transactions found');
         return;
       }
 
-      // Filter for new transactions
       const newTransactions = transactionsArray.filter((transaction) => {
         const transactionDate = new Date(transaction.timestamp || transaction.createdAt || '');
         return this.lastTransactionTimestamp && transactionDate > this.lastTransactionTimestamp;
       });
 
       if (newTransactions.length === 0) {
-        console.log('✓ No new transactions since last check');
         return;
       }
-
-      console.log(`🆕 Found ${newTransactions.length} new transaction(s)!`);
 
       // Sort by timestamp to get the latest
       newTransactions.sort((a, b) => {
@@ -156,28 +136,6 @@ class TransactionPollingService {
     }
   }
 
-  /**
-   * Manually trigger a check for new transactions
-   */
-  async manualCheck() {
-    await this.checkForNewTransactions();
-  }
-
-  /**
-   * Reset the last transaction timestamp (useful for testing)
-   */
-  async resetTimestamp() {
-    this.lastTransactionTimestamp = new Date();
-    await this.saveLastTransactionTimestamp(this.lastTransactionTimestamp);
-    console.log('Transaction timestamp reset');
-  }
-
-  /**
-   * Get polling status
-   */
-  isActive(): boolean {
-    return this.isPolling;
-  }
 }
 
 export default new TransactionPollingService();

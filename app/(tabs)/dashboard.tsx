@@ -67,31 +67,22 @@ export default function DashboardScreen() {
 
   const initializeNotifications = async () => {
     try {
-      // Request notification permissions
       const hasPermission = await notificationService.requestPermissions();
       setNotificationsEnabled(hasPermission);
 
       if (hasPermission) {
-        // Setup notification channel for Android
         await notificationService.setupNotificationChannel();
 
-        // Setup notification listeners
         notificationService.setupListeners(
-          (notification) => {
-            console.log('Notification received in dashboard:', notification);
-            // Update badge count
+          () => {
             checkForNewTransactions();
           },
-          (response) => {
-            console.log('Notification tapped:', response);
-            // Navigate to transactions when notification is tapped
+          () => {
             router.push('/(tabs)/transactions');
           }
         );
 
-        // Start polling for new transactions
         await transactionPollingService.startPolling();
-        console.log('Real-time transaction notifications enabled');
       } else {
         Alert.alert(
           'Notifications Disabled',
@@ -276,16 +267,6 @@ export default function DashboardScreen() {
                 <Ionicons name="qr-code" size={24} color={Colors.primary} />
               </View>
               <Text style={styles.actionText}>Cafe QR Code</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={styles.actionCard}
-              onPress={() => router.push('/test-notifications')}
-            >
-              <View style={[styles.actionIcon, { backgroundColor: Colors.orange[100] }]}>
-                <Ionicons name="flask" size={24} color={Colors.primary} />
-              </View>
-              <Text style={styles.actionText}>Test Notifications</Text>
             </TouchableOpacity>
           </View>
         </View>

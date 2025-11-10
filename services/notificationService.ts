@@ -30,7 +30,6 @@ class NotificationService {
    */
   async requestPermissions(): Promise<boolean> {
     if (!Device.isDevice) {
-      console.log('Must use physical device for Push Notifications');
       return false;
     }
 
@@ -43,11 +42,9 @@ class NotificationService {
     }
 
     if (finalStatus !== 'granted') {
-      console.log('Failed to get push notification permissions');
       return false;
     }
 
-    // Store permission status
     await AsyncStorage.setItem('notificationPermission', 'granted');
     return true;
   }
@@ -83,12 +80,11 @@ class NotificationService {
   async sendTransactionNotification(data: NotificationData) {
     const hasPermission = await this.areNotificationsEnabled();
     if (!hasPermission) {
-      console.log('Notifications not enabled, skipping notification');
       return;
     }
 
     try {
-      const notificationId = await Notifications.scheduleNotificationAsync({
+      await Notifications.scheduleNotificationAsync({
         content: {
           title: '💰 New Transaction',
           body: `${data.studentName} - ${data.type === 'DEBIT' ? '-' : '+'}Birr ${data.amount.toFixed(2)}`,
@@ -104,11 +100,10 @@ class NotificationService {
           badge: 1,
           ...(Platform.OS === 'android' && { channelId: 'transactions' }),
         },
-        trigger: null, // null = send immediately like SMS
+        trigger: null,
       });
-      console.log('✅ Transaction notification sent:', notificationId, data);
     } catch (error) {
-      console.error('❌ Error sending notification:', error);
+      console.error('Notification error:', error);
     }
   }
 
@@ -122,7 +117,7 @@ class NotificationService {
     }
 
     try {
-      const notificationId = await Notifications.scheduleNotificationAsync({
+      await Notifications.scheduleNotificationAsync({
         content: {
           title: '💰 New Transactions',
           body: `${count} new transaction${count > 1 ? 's' : ''} - Total: Birr ${totalAmount.toFixed(2)}`,
@@ -137,11 +132,10 @@ class NotificationService {
           badge: count,
           ...(Platform.OS === 'android' && { channelId: 'transactions' }),
         },
-        trigger: null, // null = send immediately like SMS
+        trigger: null,
       });
-      console.log('✅ Batch notification sent:', notificationId, count, 'transactions');
     } catch (error) {
-      console.error('❌ Error sending batch notification:', error);
+      console.error('Notification error:', error);
     }
   }
 
@@ -152,20 +146,16 @@ class NotificationService {
     onNotificationReceived?: (notification: Notifications.Notification) => void,
     onNotificationResponse?: (response: Notifications.NotificationResponse) => void
   ) {
-    // Listener for notifications received while app is foregrounded
     this.notificationListener = Notifications.addNotificationReceivedListener(
       (notification) => {
-        console.log('Notification received:', notification);
         if (onNotificationReceived) {
           onNotificationReceived(notification);
         }
       }
     );
 
-    // Listener for when user taps on notification
     this.responseListener = Notifications.addNotificationResponseReceivedListener(
       (response) => {
-        console.log('Notification tapped:', response);
         if (onNotificationResponse) {
           onNotificationResponse(response);
         }
