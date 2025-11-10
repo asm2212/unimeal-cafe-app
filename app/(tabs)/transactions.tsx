@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import {
   View,
   Text,
@@ -26,11 +26,23 @@ export default function TransactionsScreen() {
   const [selectedFilter, setSelectedFilter] = useState('all');
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const autoReloadInterval = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
     loadTransactions();
     // Mark transactions as viewed when screen is opened
     markTransactionsAsViewed();
+    
+    // Auto-reload transactions every 30 seconds
+    autoReloadInterval.current = setInterval(() => {
+      loadTransactions();
+    }, 30000);
+    
+    return () => {
+      if (autoReloadInterval.current) {
+        clearInterval(autoReloadInterval.current);
+      }
+    };
   }, []);
 
   const markTransactionsAsViewed = async () => {
