@@ -36,7 +36,6 @@ export default function StudentDetailsScreen() {
   const loadStudent = async () => {
     try {
       const data = await getStudent(id as string);
-      console.log('Student details loaded:', data);
       
       // Handle different response formats
       let studentData = data;

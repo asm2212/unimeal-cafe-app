@@ -46,7 +46,6 @@ export default function ProfileScreen() {
   const loadProfile = async () => {
     try {
       const data = await getCafeProfile();
-      console.log('Profile loaded:', data);
       
       // Handle different response formats
       let profileData = data;

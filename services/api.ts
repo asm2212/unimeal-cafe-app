@@ -131,28 +131,14 @@ export interface CafeDashboard {
 
 // Auth APIs
 export const cafeLogin = async (data: CafeLoginData) => {
-  console.log('=== CAFE LOGIN ATTEMPT ===');
-  console.log('Username entered:', data.username);
-  console.log('Password length:', data.password.length);
-  console.log('API URL:', API_URL);
-  console.log('Full request payload:', { 
-    identifier: data.username.trim(), 
-    password: data.password 
-  });
-  
   try {
     const response = await api.post('/auth/cafe/login', { 
       identifier: data.username.trim(), 
       password: data.password 
     });
-    console.log('✅ Cafe login SUCCESS:', response.data);
     return response.data;
   } catch (error: any) {
-    console.error('❌ Cafe login FAILED');
-    console.error('Error message:', error.message);
-    console.error('Error response:', error.response?.data);
-    console.error('Error status:', error.response?.status);
-    console.error('Full error:', error);
+    console.error('Login error:', error.response?.data?.message || error.message);
     throw error;
   }
 };
@@ -177,44 +163,31 @@ export const getCafeDashboard = async () => {
 
 // Student APIs
 export const getStudents = async () => {
-  console.log('Fetching students from /cafe/students');
   try {
     const response = await api.get('/cafe/students');
-    console.log('Students API success:', response.data);
     return response.data;
   } catch (error: any) {
-    console.error('Students API error:', error);
-    console.error('Error response:', error.response?.data);
-    console.error('Error status:', error.response?.status);
+    console.error('Students API error:', error.response?.data?.message || error.message);
     throw error;
   }
 };
 
 export const getStudent = async (id: string) => {
-  console.log('Fetching student details for ID:', id);
   try {
     const response = await api.get(`/cafe/students/${id}`);
-    console.log('Student details API success:', response.data);
     return response.data;
   } catch (error: any) {
-    console.error('Student details API error:', error);
-    console.error('Error response:', error.response?.data);
-    console.error('Error status:', error.response?.status);
+    console.error('Student details error:', error.response?.data?.message || error.message);
     throw error;
   }
 };
 
 export const registerStudent = async (data: StudentRegistrationData) => {
-  console.log('Registering student:', { ...data, password: '***' });
-  
   try {
     const response = await api.post('/cafe/students/register', data);
-    console.log('Student registration success:', response.data);
     return response.data;
   } catch (error: any) {
-    console.error('Student registration error:', error);
-    console.error('Error response:', error.response?.data);
-    console.error('Error status:', error.response?.status);
+    console.error('Registration error:', error.response?.data?.message || error.message);
     throw error;
   }
 };
@@ -230,32 +203,22 @@ export const deleteStudent = async (id: string) => {
 };
 
 export const updateStudentBalance = async (id: string, data: { amount: number; operation: 'add' | 'subtract'; reason: string; paymentMethod?: string }) => {
-  console.log('Updating student balance for ID:', id);
-  console.log('Balance update data:', data);
   try {
     const response = await api.post(`/cafe/students/${id}/balance`, data);
-    console.log('Balance update success:', response.data);
     return response.data;
   } catch (error: any) {
-    console.error('Balance update API error:', error);
-    console.error('Error response:', error.response?.data);
-    console.error('Error status:', error.response?.status);
-    console.error('Request URL:', `/cafe/students/${id}/balance`);
+    console.error('Balance update error:', error.response?.data?.message || error.message);
     throw error;
   }
 };
 
 // Cafe Profile APIs
 export const getCafeProfile = async () => {
-  console.log('Fetching cafe profile from /cafe/profile');
   try {
     const response = await api.get('/cafe/profile');
-    console.log('Cafe profile API success:', response.data);
     return response.data;
   } catch (error: any) {
-    console.error('Cafe profile API error:', error);
-    console.error('Error response:', error.response?.data);
-    console.error('Error status:', error.response?.status);
+    console.error('Profile error:', error.response?.data?.message || error.message);
     throw error;
   }
 };
@@ -266,30 +229,22 @@ export const updateCafeProfile = async (data: {
   contact: string;
   location?: string;
 }) => {
-  console.log('Updating cafe profile:', data);
   try {
     const response = await api.put('/cafe/profile', data);
-    console.log('Update cafe profile success:', response.data);
     return response.data;
   } catch (error: any) {
-    console.error('Update cafe profile error:', error);
-    console.error('Error response:', error.response?.data);
-    console.error('Error status:', error.response?.status);
+    console.error('Profile update error:', error.response?.data?.message || error.message);
     throw error;
   }
 };
 
 // Transaction APIs
 export const getTransactions = async (params?: any) => {
-  console.log('Fetching transactions from /cafe/transactions');
   try {
     const response = await api.get('/cafe/transactions', { params });
-    console.log('Transactions API success:', response.data);
     return response.data;
   } catch (error: any) {
-    console.error('Transactions API error:', error);
-    console.error('Error response:', error.response?.data);
-    console.error('Error status:', error.response?.status);
+    console.error('Transactions error:', error.response?.data?.message || error.message);
     throw error;
   }
 };
@@ -322,29 +277,21 @@ export const deleteMealPlan = async (id: string) => {
 
 // QR Code APIs
 export const getCafeQR = async (cafeId: string) => {
-  console.log('Fetching cafe QR from /qr/cafe/', cafeId);
   try {
     const response = await api.get(`/qr/cafe/${cafeId}`);
-    console.log('Cafe QR API success:', response.data);
     return response.data;
   } catch (error: any) {
-    console.error('Cafe QR API error:', error);
-    console.error('Error response:', error.response?.data);
-    console.error('Error status:', error.response?.status);
+    console.error('QR code error:', error.response?.data?.message || error.message);
     throw error;
   }
 };
 
 export const generateCafeQR = async (cafeId: string) => {
-  console.log('Generating cafe QR from /qr/cafe/', cafeId, '/generate');
   try {
     const response = await api.get(`/qr/cafe/${cafeId}/generate`);
-    console.log('Generate cafe QR API success:', response.data);
     return response.data;
   } catch (error: any) {
-    console.error('Generate cafe QR API error:', error);
-    console.error('Error response:', error.response?.data);
-    console.error('Error status:', error.response?.status);
+    console.error('Generate QR error:', error.response?.data?.message || error.message);
     throw error;
   }
 };

@@ -48,7 +48,6 @@ export default function TransactionsScreen() {
   const loadTransactions = async () => {
     try {
       const data = await getTransactions();
-      console.log('Transactions API response:', data);
       
       // Handle different response formats
       let transactionsArray: Transaction[] = [];

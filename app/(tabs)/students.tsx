@@ -34,7 +34,6 @@ export default function StudentsScreen() {
   const loadStudents = async () => {
     try {
       const data = await getStudents();
-      console.log('Students API response:', data);
       
       // Handle different response formats
       let studentsArray: Student[] = [];

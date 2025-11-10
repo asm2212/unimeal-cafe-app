@@ -31,7 +31,6 @@ export default function BalanceManagerScreen() {
   const loadStudents = async () => {
     try {
       const data = await getStudents();
-      console.log('Balance Manager - Students API response:', data);
       
       // Handle different response formats
       let studentsArray: Student[] = [];
