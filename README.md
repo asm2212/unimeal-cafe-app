@@ -149,7 +149,8 @@ To update the app:
 
 Need help?
 
-- 📧 **Email:** support@unimeal.com
+- 📧 **Email:** asmareadmasu0@gmail.com
+- 📱 **Phone:** +251 945 906 550
 - 🐛 **Issues:** [GitHub Issues](https://github.com/asm2212/unimeal-cafe-app/issues)
 
 ## 🤝 Contributing
