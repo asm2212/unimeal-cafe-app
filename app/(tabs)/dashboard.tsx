@@ -53,9 +53,7 @@ export default function DashboardScreen() {
   // Handle screen focus to restart polling
   useFocusEffect(
     useCallback(() => {
-      if (notificationsEnabled) {
-        transactionPollingService.startPolling();
-      }
+      transactionPollingService.startPolling();
       checkForNewTransactions();
       
       return () => {
@@ -81,8 +79,6 @@ export default function DashboardScreen() {
             router.push('/(tabs)/transactions');
           }
         );
-
-        await transactionPollingService.startPolling();
       } else {
         Alert.alert(
           'Notifications Disabled',
@@ -90,6 +86,8 @@ export default function DashboardScreen() {
           [{ text: 'OK' }]
         );
       }
+
+      await transactionPollingService.startPolling();
     } catch (error) {
       console.error('Error initializing notifications:', error);
     }

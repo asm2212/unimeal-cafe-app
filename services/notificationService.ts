@@ -1,6 +1,6 @@
 import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
-import { Platform } from 'react-native';
+import { Platform, Linking } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Configure how notifications should be handled when the app is in the foreground
@@ -47,6 +47,24 @@ class NotificationService {
 
     await AsyncStorage.setItem('notificationPermission', 'granted');
     return true;
+  }
+
+  async ensureEnabled(): Promise<boolean> {
+    const current = await Notifications.getPermissionsAsync();
+    if (current.status === 'granted') {
+      return true;
+    }
+    if (current.canAskAgain) {
+      const { status } = await Notifications.requestPermissionsAsync();
+      return status === 'granted';
+    }
+    return false;
+  }
+
+  async openSettings() {
+    try {
+      await Linking.openSettings();
+    } catch {}
   }
 
   /**
