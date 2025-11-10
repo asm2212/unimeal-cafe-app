@@ -1,0 +1,116 @@
+UniMeal Cafe v2.2.0 - SMS-Like Instant Notifications
+=====================================================
+
+🎉 Major Update: Real-Time Transaction Notifications!
+
+NEW FEATURES
+------------
+🔔 SMS-Like Instant Notifications
+   - Receive transaction alerts within 5 seconds
+   - Just like receiving an SMS message - instant and reliable
+   
+📱 Sound & Vibration Alerts
+   - Full sensory feedback for every transaction
+   - Never miss a transaction even when busy
+   
+💰 Transaction Details
+   - See student name and amount instantly
+   - Know exactly who paid and how much
+   
+🎯 Smart Notifications
+   - Single transaction: Individual alert
+   - Multiple transactions: Grouped summary
+   - Intelligent batching to avoid spam
+   
+🔊 Tap to View
+   - Tap any notification to see full transaction details
+   - Seamless navigation to transactions screen
+   
+📊 Badge Counts
+   - Visual indicator of unread transactions
+   - Red badge shows number of new transactions
+   - Auto-clears when you view transactions
+
+TECHNICAL IMPROVEMENTS
+----------------------
+⚡ 5-Second Polling
+   - Checks for new transactions every 5 seconds
+   - SMS-like speed and reliability
+   
+🔋 Battery Optimized
+   - Efficient polling mechanism
+   - Minimal battery impact
+   - Smart background processing
+   
+🎨 Production-Ready Code
+   - All debug code removed
+   - Clean, professional codebase
+   - Optimized performance
+   
+🛡️ Robust Error Handling
+   - Graceful permission handling
+   - Professional error messages
+   - Stable and reliable
+
+HOW IT WORKS
+------------
+1. Install the app and grant notification permissions
+2. Notifications start automatically
+3. When a student makes a transaction:
+   - Within 5 seconds, you get a notification
+   - Sound plays and device vibrates
+   - See student name and amount
+4. Tap notification to view full details
+5. Badge count shows unread transactions
+
+REQUIREMENTS
+------------
+- Android 7.0 or higher (API 24+)
+- Notification permissions (requested on first launch)
+- Internet connection
+- 200 MB free space
+
+INSTALLATION
+------------
+1. Download unimeal-cafe-v2.2.0.apk
+2. Enable "Install from Unknown Sources" in Settings
+3. Install the APK
+4. Grant notification permissions when prompted
+5. Start receiving instant transaction alerts!
+
+UPGRADE FROM v2.1.0
+-------------------
+- Simply install v2.2.0 over existing app
+- All your data will be preserved
+- Notification system activates automatically
+- No configuration needed
+
+WHAT'S FIXED
+------------
+✅ Removed all test code and debug features
+✅ Cleaned up all verbose logging
+✅ Production-ready codebase
+✅ Optimized notification delivery
+✅ Improved error handling
+
+KNOWN LIMITATIONS
+-----------------
+- Requires physical device (notifications don't work in emulators)
+- Requires notification permissions
+- Requires stable internet connection
+
+SUPPORT
+-------
+📧 Email: asmareadmasu0@gmail.com
+📱 Phone: +251 945 906 550
+🐛 Issues: https://github.com/asm2212/unimeal-cafe-app/issues
+
+CREDITS
+-------
+Built with ❤️ for cafe owners
+Powered by React Native & Expo
+Part of the UniMeal ecosystem
+
+---
+
+Download now and never miss a transaction again! 🚀
