@@ -9,6 +9,8 @@ import {
   ActivityIndicator,
   Modal,
   TextInput,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -224,86 +226,97 @@ export default function StudentDetailsScreen() {
       {/* Balance Update Modal */}
       <Modal visible={showBalanceModal} animationType="slide" transparent={true}>
         <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>
-                {balanceOperation === 'add' ? 'Add' : 'Deduct'} Balance
-              </Text>
-              <TouchableOpacity onPress={() => setShowBalanceModal(false)}>
-                <Ionicons name="close" size={24} color={Colors.text} />
-              </TouchableOpacity>
-            </View>
-
-            <View style={styles.form}>
-              <View style={styles.inputGroup}>
-                <Text style={styles.label}>Amount (Birr)</Text>
-                <TextInput
-                  style={styles.input}
-                  placeholder="0.00"
-                  placeholderTextColor={Colors.gray[400]}
-                  keyboardType="decimal-pad"
-                  value={amount}
-                  onChangeText={setAmount}
-                />
-              </View>
-
-              <View style={styles.inputGroup}>
-                <Text style={styles.label}>Payment Method</Text>
-                <View style={styles.paymentMethodsContainer}>
-                  {['cash', 'bank_transfer', 'mobile_money', 'card'].map((method) => (
-                    <TouchableOpacity
-                      key={method}
-                      style={[
-                        styles.paymentMethodButton,
-                        paymentMethod === method && styles.paymentMethodButtonActive,
-                      ]}
-                      onPress={() => setPaymentMethod(method)}
-                    >
-                      <Text
-                        style={[
-                          styles.paymentMethodText,
-                          paymentMethod === method && styles.paymentMethodTextActive,
-                        ]}
-                      >
-                        {method.replace('_', ' ').toUpperCase()}
-                      </Text>
-                    </TouchableOpacity>
-                  ))}
-                </View>
-              </View>
-
-              <View style={styles.inputGroup}>
-                <Text style={styles.label}>Reason</Text>
-                <TextInput
-                  style={[styles.input, styles.textArea]}
-                  placeholder="Enter reason for balance update"
-                  placeholderTextColor={Colors.gray[400]}
-                  multiline
-                  numberOfLines={3}
-                  value={reason}
-                  onChangeText={setReason}
-                />
-              </View>
-            </View>
-
-            <TouchableOpacity
-              style={[
-                styles.updateButton,
-                balanceOperation === 'add' ? styles.updateButtonAdd : styles.updateButtonSubtract,
-                processing && styles.updateButtonDisabled,
-              ]}
-              onPress={handleUpdateBalance}
-              disabled={processing}
-            >
-              {processing ? (
-                <ActivityIndicator color={Colors.white} />
-              ) : (
-                <Text style={styles.updateButtonText}>
+          <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            style={styles.keyboardAvoidingView}
+          >
+            <View style={styles.modalContent}>
+              <View style={styles.modalHeader}>
+                <Text style={styles.modalTitle}>
                   {balanceOperation === 'add' ? 'Add' : 'Deduct'} Balance
                 </Text>
-              )}
-            </TouchableOpacity>
-          </View>
+                <TouchableOpacity onPress={() => setShowBalanceModal(false)}>
+                  <Ionicons name="close" size={24} color={Colors.text} />
+                </TouchableOpacity>
+              </View>
+
+              <ScrollView
+                style={styles.modalScrollView}
+                showsVerticalScrollIndicator={false}
+                keyboardShouldPersistTaps="handled"
+              >
+                <View style={styles.form}>
+                  <View style={styles.inputGroup}>
+                    <Text style={styles.label}>Amount (Birr)</Text>
+                    <TextInput
+                      style={styles.input}
+                      placeholder="0.00"
+                      placeholderTextColor={Colors.gray[400]}
+                      keyboardType="decimal-pad"
+                      value={amount}
+                      onChangeText={setAmount}
+                    />
+                  </View>
+
+                  <View style={styles.inputGroup}>
+                    <Text style={styles.label}>Payment Method</Text>
+                    <View style={styles.paymentMethodsContainer}>
+                      {['cash', 'bank_transfer', 'mobile_money', 'card'].map((method) => (
+                        <TouchableOpacity
+                          key={method}
+                          style={[
+                            styles.paymentMethodButton,
+                            paymentMethod === method && styles.paymentMethodButtonActive,
+                          ]}
+                          onPress={() => setPaymentMethod(method)}
+                        >
+                          <Text
+                            style={[
+                              styles.paymentMethodText,
+                              paymentMethod === method && styles.paymentMethodTextActive,
+                            ]}
+                          >
+                            {method.replace('_', ' ').toUpperCase()}
+                          </Text>
+                        </TouchableOpacity>
+                      ))}
+                    </View>
+                  </View>
+
+                  <View style={styles.inputGroup}>
+                    <Text style={styles.label}>Reason</Text>
+                    <TextInput
+                      style={[styles.input, styles.textArea]}
+                      placeholder="Enter reason for balance update"
+                      placeholderTextColor={Colors.gray[400]}
+                      multiline
+                      numberOfLines={3}
+                      value={reason}
+                      onChangeText={setReason}
+                    />
+                  </View>
+                </View>
+              </ScrollView>
+
+              <TouchableOpacity
+                style={[
+                  styles.updateButton,
+                  balanceOperation === 'add' ? styles.updateButtonAdd : styles.updateButtonSubtract,
+                  processing && styles.updateButtonDisabled,
+                ]}
+                onPress={handleUpdateBalance}
+                disabled={processing}
+              >
+                {processing ? (
+                  <ActivityIndicator color={Colors.white} />
+                ) : (
+                  <Text style={styles.updateButtonText}>
+                    {balanceOperation === 'add' ? 'Add' : 'Deduct'} Balance
+                  </Text>
+                )}
+              </TouchableOpacity>
+            </View>
+          </KeyboardAvoidingView>
         </View>
       </Modal>
     </View>
@@ -453,11 +466,19 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
     justifyContent: 'flex-end',
   },
+  keyboardAvoidingView: {
+    flex: 1,
+    justifyContent: 'flex-end',
+  },
   modalContent: {
     backgroundColor: Colors.white,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     padding: 20,
+    maxHeight: '80%',
+  },
+  modalScrollView: {
+    maxHeight: 400,
   },
   modalHeader: {
     flexDirection: 'row',

@@ -77,6 +77,14 @@ export default function DashboardScreen() {
           },
           () => {
             router.push('/(tabs)/transactions');
+          },
+          (appState) => {
+            console.log('App state changed to:', appState);
+            if (appState === 'active') {
+              // Clear badge when app becomes active
+              notificationService.clearBadgeCount();
+              checkForNewTransactions();
+            }
           }
         );
       } else {

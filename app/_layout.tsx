@@ -25,6 +25,18 @@ export default function RootLayout() {
           const granted = await notificationService.ensureEnabled();
           if (granted) {
             await notificationService.setupNotificationChannel();
+            // Send notification status alert when app becomes active
+            await notificationService.sendNotificationStatusAlert(true);
+          } else {
+            await notificationService.sendNotificationStatusAlert(false);
+          }
+        } catch {}
+      } else if (state === 'background' || state === 'inactive') {
+        // App is going to background, ensure notifications work
+        try {
+          const granted = await notificationService.areNotificationsEnabled();
+          if (granted) {
+            console.log('App in background - notifications will continue to work');
           }
         } catch {}
       }
