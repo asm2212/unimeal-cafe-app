@@ -2,7 +2,7 @@
   "expo": {
     "name": "UniMeal Cafe",
     "slug": "unimeal-cafe-app",
-    "version": "2.6.0",
+    "version": "2.7.0",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
     "scheme": "unimeal-cafe",
@@ -30,6 +30,7 @@
         "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#FF6B35"
       },
+      "softwareKeyboardLayoutMode": "resize",
       "permissions": [
         "android.permission.CAMERA",
         "android.permission.READ_MEDIA_IMAGES",

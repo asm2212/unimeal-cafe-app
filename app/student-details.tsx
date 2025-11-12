@@ -114,212 +114,225 @@ export default function StudentDetailsScreen() {
 
 
   return (
-    <View style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={24} color={Colors.text} />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Student Details</Text>
-        <View style={{ width: 40 }} />
-      </View>
-
-      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
-        {/* Student Info Card */}
-        <View style={styles.infoCard}>
-          <View style={styles.avatar}>
-            <Ionicons name="person" size={48} color={Colors.primary} />
-          </View>
-          <Text style={styles.studentName}>{student.fullName || student.name}</Text>
-          <Text style={styles.studentId}>ID: {student.studentId}</Text>
-          <View style={styles.balanceContainer}>
-            <Text style={styles.balanceLabel}>Current Balance</Text>
-            <Text style={[styles.balanceAmount, { color: getBalanceColor(student.balance || 0) }]}>
-              Birr {(student.balance || 0).toFixed(2)}
-            </Text>
-          </View>
+    <>
+      <KeyboardAvoidingView 
+        style={styles.container}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
+      >
+        {/* Header */}
+        <View style={styles.header}>
+          <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
+            <Ionicons name="arrow-back" size={24} color={Colors.text} />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>Student Details</Text>
+          <View style={{ width: 40 }} />
         </View>
 
-        {/* Contact Info */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Student Information</Text>
-          <View style={styles.contactCard}>
-            <View style={styles.contactItem}>
-              <Ionicons name="call" size={20} color={Colors.primary} />
-              <Text style={styles.contactText}>{student.phone}</Text>
+        <ScrollView 
+          style={styles.scrollView} 
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+          contentContainerStyle={{ paddingBottom: 20 }}
+        >
+          {/* Student Info Card */}
+          <View style={styles.infoCard}>
+            <View style={styles.avatar}>
+              <Ionicons name="person" size={48} color={Colors.primary} />
             </View>
-            {(student as any).username && (
-              <View style={styles.contactItem}>
-                <Ionicons name="person-circle" size={20} color={Colors.primary} />
-                <Text style={styles.contactText}>@{(student as any).username}</Text>
-              </View>
-            )}
-            {(student as any).department && (
-              <View style={styles.contactItem}>
-                <Ionicons name="school" size={20} color={Colors.primary} />
-                <Text style={styles.contactText}>{(student as any).department}</Text>
-              </View>
-            )}
-            {(student as any).email && (
-              <View style={styles.contactItem}>
-                <Ionicons name="mail" size={20} color={Colors.primary} />
-                <Text style={styles.contactText}>{(student as any).email}</Text>
-              </View>
-            )}
-          </View>
-        </View>
-
-        {/* Balance History */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Balance Information</Text>
-          <View style={styles.balanceHistoryCard}>
-            <View style={styles.balanceRow}>
-              <View style={styles.balanceItem}>
-                <Ionicons name="wallet" size={20} color={Colors.primary} />
-                <Text style={styles.balanceItemLabel}>Current Balance</Text>
-                <Text style={[styles.balanceItemValue, { color: getBalanceColor(student.balance || 0) }]}>
-                  Birr {(student.balance || 0).toFixed(2)}
-                </Text>
-              </View>
-            </View>
-            <View style={styles.balanceRow}>
-              <View style={styles.balanceItem}>
-                <Ionicons name="card" size={20} color={Colors.success} />
-                <Text style={styles.balanceItemLabel}>Account Status</Text>
-                <Text style={[styles.balanceItemValue, { color: (student.balance || 0) > 0 ? Colors.success : Colors.error }]}>
-                  {(student.balance || 0) > 0 ? 'Active' : 'Low Balance'}
-                </Text>
-              </View>
+            <Text style={styles.studentName}>{student.fullName || student.name}</Text>
+            <Text style={styles.studentId}>ID: {student.studentId}</Text>
+            <View style={styles.balanceContainer}>
+              <Text style={styles.balanceLabel}>Current Balance</Text>
+              <Text style={[styles.balanceAmount, { color: getBalanceColor(student.balance || 0) }]}>
+                Birr {(student.balance || 0).toFixed(2)}
+              </Text>
             </View>
           </View>
-        </View>
 
-        {/* Actions */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Quick Actions</Text>
-          <View style={styles.actionsGrid}>
-            <TouchableOpacity
-              style={styles.actionCard}
-              onPress={() => {
-                setBalanceOperation('add');
-                setShowBalanceModal(true);
-              }}
-            >
-              <Ionicons name="add-circle" size={32} color={Colors.success} />
-              <Text style={styles.actionText}>Add Balance</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={styles.actionCard}
-              onPress={() => {
-                setBalanceOperation('subtract');
-                setShowBalanceModal(true);
-              }}
-            >
-              <Ionicons name="remove-circle" size={32} color={Colors.error} />
-              <Text style={styles.actionText}>Deduct Balance</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </ScrollView>
-
-      {/* Balance Update Modal */}
-      <Modal visible={showBalanceModal} animationType="slide" transparent={true}>
-        <View style={styles.modalOverlay}>
-          <KeyboardAvoidingView
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-            style={styles.keyboardAvoidingView}
-          >
-            <View style={styles.modalContent}>
-              <View style={styles.modalHeader}>
-                <Text style={styles.modalTitle}>
-                  {balanceOperation === 'add' ? 'Add' : 'Deduct'} Balance
-                </Text>
-                <TouchableOpacity onPress={() => setShowBalanceModal(false)}>
-                  <Ionicons name="close" size={24} color={Colors.text} />
-                </TouchableOpacity>
+          {/* Contact Info */}
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Student Information</Text>
+            <View style={styles.contactCard}>
+              <View style={styles.contactItem}>
+                <Ionicons name="call" size={20} color={Colors.primary} />
+                <Text style={styles.contactText}>{student.phone}</Text>
               </View>
-
-              <ScrollView
-                style={styles.modalScrollView}
-                showsVerticalScrollIndicator={false}
-                keyboardShouldPersistTaps="handled"
-              >
-                <View style={styles.form}>
-                  <View style={styles.inputGroup}>
-                    <Text style={styles.label}>Amount (Birr)</Text>
-                    <TextInput
-                      style={styles.input}
-                      placeholder="0.00"
-                      placeholderTextColor={Colors.gray[400]}
-                      keyboardType="decimal-pad"
-                      value={amount}
-                      onChangeText={setAmount}
-                    />
-                  </View>
-
-                  <View style={styles.inputGroup}>
-                    <Text style={styles.label}>Payment Method</Text>
-                    <View style={styles.paymentMethodsContainer}>
-                      {['cash', 'bank_transfer', 'mobile_money', 'card'].map((method) => (
-                        <TouchableOpacity
-                          key={method}
-                          style={[
-                            styles.paymentMethodButton,
-                            paymentMethod === method && styles.paymentMethodButtonActive,
-                          ]}
-                          onPress={() => setPaymentMethod(method)}
-                        >
-                          <Text
-                            style={[
-                              styles.paymentMethodText,
-                              paymentMethod === method && styles.paymentMethodTextActive,
-                            ]}
-                          >
-                            {method.replace('_', ' ').toUpperCase()}
-                          </Text>
-                        </TouchableOpacity>
-                      ))}
-                    </View>
-                  </View>
-
-                  <View style={styles.inputGroup}>
-                    <Text style={styles.label}>Reason</Text>
-                    <TextInput
-                      style={[styles.input, styles.textArea]}
-                      placeholder="Enter reason for balance update"
-                      placeholderTextColor={Colors.gray[400]}
-                      multiline
-                      numberOfLines={3}
-                      value={reason}
-                      onChangeText={setReason}
-                    />
-                  </View>
+              {(student as any).username && (
+                <View style={styles.contactItem}>
+                  <Ionicons name="person-circle" size={20} color={Colors.primary} />
+                  <Text style={styles.contactText}>@{(student as any).username}</Text>
                 </View>
-              </ScrollView>
+              )}
+              {(student as any).department && (
+                <View style={styles.contactItem}>
+                  <Ionicons name="school" size={20} color={Colors.primary} />
+                  <Text style={styles.contactText}>{(student as any).department}</Text>
+                </View>
+              )}
+              {(student as any).email && (
+                <View style={styles.contactItem}>
+                  <Ionicons name="mail" size={20} color={Colors.primary} />
+                  <Text style={styles.contactText}>{(student as any).email}</Text>
+                </View>
+              )}
+            </View>
+          </View>
+
+          {/* Balance History */}
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Balance Information</Text>
+            <View style={styles.balanceHistoryCard}>
+              <View style={styles.balanceRow}>
+                <View style={styles.balanceItem}>
+                  <Ionicons name="wallet" size={20} color={Colors.primary} />
+                  <Text style={styles.balanceItemLabel}>Current Balance</Text>
+                  <Text style={[styles.balanceItemValue, { color: getBalanceColor(student.balance || 0) }]}>
+                    Birr {(student.balance || 0).toFixed(2)}
+                  </Text>
+                </View>
+              </View>
+              <View style={styles.balanceRow}>
+                <View style={styles.balanceItem}>
+                  <Ionicons name="card" size={20} color={Colors.success} />
+                  <Text style={styles.balanceItemLabel}>Account Status</Text>
+                  <Text style={[styles.balanceItemValue, { color: (student.balance || 0) > 0 ? Colors.success : Colors.error }]}>
+                    {(student.balance || 0) > 0 ? 'Active' : 'Low Balance'}
+                  </Text>
+                </View>
+              </View>
+            </View>
+          </View>
+
+          {/* Actions */}
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Quick Actions</Text>
+            <View style={styles.actionsGrid}>
+              <TouchableOpacity
+                style={styles.actionCard}
+                onPress={() => {
+                  setBalanceOperation('add');
+                  setShowBalanceModal(true);
+                }}
+              >
+                <Ionicons name="add-circle" size={32} color={Colors.success} />
+                <Text style={styles.actionText}>Add Balance</Text>
+              </TouchableOpacity>
 
               <TouchableOpacity
-                style={[
-                  styles.updateButton,
-                  balanceOperation === 'add' ? styles.updateButtonAdd : styles.updateButtonSubtract,
-                  processing && styles.updateButtonDisabled,
-                ]}
-                onPress={handleUpdateBalance}
-                disabled={processing}
+                style={styles.actionCard}
+                onPress={() => {
+                  setBalanceOperation('subtract');
+                  setShowBalanceModal(true);
+                }}
               >
-                {processing ? (
-                  <ActivityIndicator color={Colors.white} />
-                ) : (
-                  <Text style={styles.updateButtonText}>
-                    {balanceOperation === 'add' ? 'Add' : 'Deduct'} Balance
-                  </Text>
-                )}
+                <Ionicons name="remove-circle" size={32} color={Colors.error} />
+                <Text style={styles.actionText}>Deduct Balance</Text>
               </TouchableOpacity>
             </View>
-          </KeyboardAvoidingView>
-        </View>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
+
+      {/* Balance Update Modal - Full Screen */}
+      <Modal visible={showBalanceModal} animationType="slide" transparent={false}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={styles.fullScreenModalContainer}
+        >
+          <View style={styles.fullScreenModalContent}>
+            <View style={styles.fullScreenHeader}>
+              <TouchableOpacity 
+                onPress={() => setShowBalanceModal(false)}
+                style={styles.backButton}
+              >
+                <Ionicons name="arrow-back" size={24} color={Colors.text} />
+              </TouchableOpacity>
+              <Text style={styles.fullScreenTitle}>
+                {balanceOperation === 'add' ? 'Add' : 'Deduct'} Balance
+              </Text>
+              <View style={{ width: 40 }} />
+            </View>
+
+            <ScrollView
+              style={styles.modalScrollView}
+              showsVerticalScrollIndicator={false}
+              keyboardShouldPersistTaps="handled"
+            >
+              <View style={styles.form}>
+                <View style={styles.inputGroup}>
+                  <Text style={styles.label}>Amount (Birr)</Text>
+                  <TextInput
+                    style={styles.input}
+                    placeholder="0.00"
+                    placeholderTextColor={Colors.gray[400]}
+                    keyboardType="decimal-pad"
+                    value={amount}
+                    onChangeText={setAmount}
+                  />
+                </View>
+
+                <View style={styles.inputGroup}>
+                  <Text style={styles.label}>Payment Method</Text>
+                  <View style={styles.paymentMethodsContainer}>
+                    {['cash', 'bank_transfer', 'mobile_money', 'card'].map((method) => (
+                      <TouchableOpacity
+                        key={method}
+                        style={[
+                          styles.paymentMethodButton,
+                          paymentMethod === method && styles.paymentMethodButtonActive,
+                        ]}
+                        onPress={() => setPaymentMethod(method)}
+                      >
+                        <Text
+                          style={[
+                            styles.paymentMethodText,
+                            paymentMethod === method && styles.paymentMethodTextActive,
+                          ]}
+                        >
+                          {method.replace('_', ' ').toUpperCase()}
+                        </Text>
+                      </TouchableOpacity>
+                    ))}
+                  </View>
+                </View>
+
+                <View style={styles.inputGroup}>
+                  <Text style={styles.label}>Reason</Text>
+                  <TextInput
+                    style={[styles.input, styles.textArea]}
+                    placeholder="Enter reason for balance update"
+                    placeholderTextColor={Colors.gray[400]}
+                    multiline
+                    numberOfLines={3}
+                    value={reason}
+                    onChangeText={setReason}
+                  />
+                </View>
+              </View>
+            </ScrollView>
+
+            <TouchableOpacity
+              style={[
+                styles.updateButton,
+                balanceOperation === 'add' ? styles.updateButtonAdd : styles.updateButtonSubtract,
+                processing && styles.updateButtonDisabled,
+              ]}
+              onPress={handleUpdateBalance}
+              disabled={processing}
+            >
+              {processing ? (
+                <ActivityIndicator color={Colors.white} />
+              ) : (
+                <Text style={styles.updateButtonText}>
+                  {balanceOperation === 'add' ? 'Add' : 'Deduct'} Balance
+                </Text>
+              )}
+            </TouchableOpacity>
+          </View>
+        </KeyboardAvoidingView>
       </Modal>
-    </View>
+    </>
   );
 }
 
@@ -586,5 +599,27 @@ const styles = StyleSheet.create({
   },
   paymentMethodTextActive: {
     color: Colors.white,
+  },
+  fullScreenModalContainer: {
+    flex: 1,
+    backgroundColor: Colors.background,
+  },
+  fullScreenModalContent: {
+    flex: 1,
+    backgroundColor: Colors.background,
+  },
+  fullScreenHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    paddingTop: 50,
+    paddingBottom: 20,
+    backgroundColor: Colors.white,
+  },
+  fullScreenTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: Colors.text,
   },
 });
