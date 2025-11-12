@@ -17,8 +17,51 @@ import * as Print from 'expo-print';
 import Colors from '../../constants/Colors';
 import { getCafeQR, generateCafeQR } from '../../services/api';
 
-const { width } = Dimensions.get('window');
-const QR_SIZE = Math.min(width * 0.6, 300);
+const { width, height } = Dimensions.get('window');
+
+// Enhanced responsive calculations
+const isTablet = width >= 768;
+const isSmallScreen = width < 375;
+const isLandscape = width > height;
+const isVerySmallScreen = width < 320;
+
+// Dynamic QR size based on device type and orientation
+const getResponsiveQRSize = () => {
+  if (isVerySmallScreen) {
+    return Math.min(width * 0.75, 220);
+  } else if (isSmallScreen) {
+    return Math.min(width * 0.7, 250);
+  } else if (isTablet) {
+    return isLandscape ? Math.min(height * 0.5, 350) : Math.min(width * 0.45, 400);
+  } else if (isLandscape) {
+    return Math.min(height * 0.6, 280);
+  } else {
+    return Math.min(width * 0.6, 300);
+  }
+};
+
+const QR_SIZE = getResponsiveQRSize();
+
+// Responsive spacing and sizing helpers
+const getResponsivePadding = () => {
+  if (isVerySmallScreen) return 12;
+  if (isSmallScreen) return 16;
+  if (isTablet) return 32;
+  return 20;
+};
+
+const getResponsiveMargin = () => {
+  if (isVerySmallScreen) return 12;
+  if (isSmallScreen) return 16;
+  if (isTablet) return 24;
+  return 20;
+};
+
+const getResponsiveFontSize = (base: number) => {
+  if (isVerySmallScreen) return base - 2;
+  if (isTablet) return base + 2;
+  return base;
+};
 
 export default function QRCodeScreen() {
   const [loading, setLoading] = useState(true);
@@ -282,34 +325,39 @@ const styles = StyleSheet.create({
     color: Colors.gray[600] 
   },
   header: { 
-    padding: 20, 
-    paddingTop: 60, 
-    paddingBottom: 20,
+    padding: getResponsivePadding(), 
+    paddingTop: isTablet ? 80 : 60, 
+    paddingBottom: getResponsivePadding(),
     backgroundColor: Colors.primary 
   },
   headerTitle: { 
-    fontSize: 28, 
+    fontSize: getResponsiveFontSize(28), 
     fontWeight: 'bold', 
     color: Colors.white,
+    textAlign: 'center',
   },
   qrCard: {
     backgroundColor: Colors.white,
-    marginHorizontal: 20,
-    marginTop: 20,
-    borderRadius: 16,
-    padding: width < 380 ? 20 : 30,
+    marginHorizontal: getResponsiveMargin(),
+    marginTop: getResponsiveMargin(),
+    borderRadius: isTablet ? 20 : 16,
+    padding: getResponsivePadding() + (isTablet ? 10 : 0),
     alignItems: 'center',
     elevation: 4,
     shadowColor: Colors.black,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 8,
+    maxWidth: isTablet ? 600 : undefined,
+    alignSelf: isTablet ? 'center' : 'stretch',
   },
   qrContainer: {
-    padding: width < 380 ? 15 : 20,
+    padding: isVerySmallScreen ? 12 : (isTablet ? 24 : 16),
     backgroundColor: Colors.gray[50],
-    borderRadius: 16,
-    marginBottom: 20,
+    borderRadius: isTablet ? 20 : 16,
+    marginBottom: isTablet ? 24 : 20,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   generatingContainer: { 
     width: QR_SIZE, 
@@ -325,78 +373,88 @@ const styles = StyleSheet.create({
   infoCard: {
     flexDirection: 'row',
     backgroundColor: Colors.success + '15',
-    marginHorizontal: 20,
-    marginTop: 16,
-    padding: 16,
-    borderRadius: 12,
-    borderLeftWidth: 4,
+    marginHorizontal: getResponsiveMargin(),
+    marginTop: getResponsiveMargin() * 0.8,
+    padding: getResponsivePadding(),
+    borderRadius: isTablet ? 16 : 12,
+    borderLeftWidth: isTablet ? 6 : 4,
     borderLeftColor: Colors.success,
-    gap: 12,
+    gap: isTablet ? 16 : 12,
+    maxWidth: isTablet ? 600 : undefined,
+    alignSelf: isTablet ? 'center' : 'stretch',
   },
   infoText: {
     flex: 1,
-    fontSize: 14,
+    fontSize: getResponsiveFontSize(14),
     color: Colors.gray[700],
-    lineHeight: 20,
+    lineHeight: getResponsiveFontSize(20),
   },
   securityCard: {
     flexDirection: 'row',
     backgroundColor: Colors.orange[50],
-    marginHorizontal: 20,
-    marginTop: 12,
-    padding: 14,
-    borderRadius: 12,
-    borderLeftWidth: 4,
+    marginHorizontal: getResponsiveMargin(),
+    marginTop: getResponsiveMargin() * 0.6,
+    padding: getResponsivePadding() * 0.9,
+    borderRadius: isTablet ? 16 : 12,
+    borderLeftWidth: isTablet ? 6 : 4,
     borderLeftColor: Colors.primary,
-    gap: 10,
+    gap: isTablet ? 14 : 10,
+    maxWidth: isTablet ? 600 : undefined,
+    alignSelf: isTablet ? 'center' : 'stretch',
   },
   securityText: {
     flex: 1,
-    fontSize: 13,
+    fontSize: getResponsiveFontSize(13),
     color: Colors.gray[600],
-    lineHeight: 18,
+    lineHeight: getResponsiveFontSize(18),
   },
   actionButtons: { 
-    flexDirection: 'row', 
-    paddingHorizontal: 20,
-    paddingVertical: 20,
-    gap: 12,
+    flexDirection: isTablet && !isLandscape ? 'column' : 'row', 
+    paddingHorizontal: getResponsiveMargin(),
+    paddingVertical: getResponsiveMargin(),
+    gap: isTablet ? 16 : 12,
+    maxWidth: isTablet ? 600 : undefined,
+    alignSelf: isTablet ? 'center' : 'stretch',
   },
   primaryButton: {
-    flex: 1,
+    flex: isTablet && !isLandscape ? 0 : 1,
     backgroundColor: Colors.primary,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: 16,
-    borderRadius: 12,
-    gap: 8,
+    paddingVertical: isTablet ? 20 : 16,
+    paddingHorizontal: isTablet ? 24 : 16,
+    borderRadius: isTablet ? 16 : 12,
+    gap: isTablet ? 12 : 8,
     elevation: 2,
     shadowColor: Colors.primary,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
     shadowRadius: 4,
+    minHeight: isTablet ? 56 : 48,
   },
   primaryButtonText: { 
     color: Colors.white, 
-    fontSize: 16, 
+    fontSize: getResponsiveFontSize(16), 
     fontWeight: '600' 
   },
   secondaryButton: {
-    flex: 1,
+    flex: isTablet && !isLandscape ? 0 : 1,
     backgroundColor: Colors.white,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: 16,
-    borderRadius: 12,
+    paddingVertical: isTablet ? 20 : 16,
+    paddingHorizontal: isTablet ? 24 : 16,
+    borderRadius: isTablet ? 16 : 12,
     borderWidth: 2,
     borderColor: Colors.primary,
-    gap: 8,
+    gap: isTablet ? 12 : 8,
+    minHeight: isTablet ? 56 : 48,
   },
   secondaryButtonText: { 
     color: Colors.primary, 
-    fontSize: 16, 
+    fontSize: getResponsiveFontSize(16), 
     fontWeight: '600' 
   },
 });
