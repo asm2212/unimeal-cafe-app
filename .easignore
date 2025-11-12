@@ -1,0 +1,91 @@
+# EAS Build ignore file
+# Exclude unnecessary files to reduce build size
+
+# Development files
+node_modules/
+.git/
+.github/
+.expo/
+.next/
+dist/
+build-output/
+
+# Documentation and scripts
+*.md
+*.txt
+scripts/
+docs/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+
+# nyc test coverage
+.nyc_output
+
+# Dependency directories
+jspm_packages/
+
+# Optional npm cache directory
+.npm
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# dotenv environment variables file
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Temporary folders
+tmp/
+temp/
+
+# Build artifacts
+*.apk
+*.aab
+*.ipa
+
+# Large media files (if any)
+*.mp4
+*.mov
+*.avi
+*.mkv
+
+# Backup files
+*.bak
+*.backup

@@ -1,0 +1,25 @@
+UniMeal Cafe Build Information
+============================
+
+Version: 2.8.0
+Build Date: Thu Nov 13 12:16:32 AM EAT 2025
+Build Type: Production Release
+Platform: Android
+Package: com.unimeal.cafe
+
+Technical Specifications:
+- Min SDK Version: 24 (Android 7.0)
+- Target SDK Version: 35 (Android 14)
+- Compile SDK Version: 35
+- Build Tools: 35.0.0
+- Kotlin Version: 2.1.0
+
+Features:
+- Complete responsive design system
+- Enhanced user experience across all devices
+- Improved accessibility and touch targets
+- Optimized layouts for phones and tablets
+- Cross-device compatibility
+
+Repository: https://github.com/asm2212/unimeal-cafe-app
+Release Tag: v2.8.0

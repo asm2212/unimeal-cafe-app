@@ -1,0 +1,17 @@
+UniMeal Cafe - Quick Installation Guide
+======================================
+
+For Android Devices:
+1. Download the APK file
+2. Go to Settings > Security
+3. Enable "Unknown Sources" or "Install Unknown Apps"
+4. Tap the downloaded APK file
+5. Follow the installation prompts
+6. Launch "UniMeal Cafe" from your apps
+
+Need Help?
+- Read APK_INFO.md for detailed instructions
+- Check BUILD_INFO.txt for technical details
+- Visit GitHub repository for support
+
+Enjoy your new responsive UniMeal Cafe app! 🎉

@@ -16,7 +16,7 @@
       "API_URL": "https://unimeal-backend.duckdns.org",
       "router": {},
       "eas": {
-        "projectId": "d91cecdd-6d32-4de2-894e-84a9a9d1bc92"
+        "projectId": "5f7f407b-a650-4545-961a-91b704f8f4cf"
       }
     },
     "ios": {
@@ -76,6 +76,7 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "owner": "samri44"
   }
 }
