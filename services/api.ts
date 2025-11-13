@@ -239,12 +239,30 @@ export const updateCafeProfile = async (data: {
 };
 
 // Transaction APIs
-export const getTransactions = async (params?: any) => {
+export interface TransactionFilters {
+  studentId?: string;
+  startDate?: string;
+  endDate?: string;
+  searchQuery?: string;
+  period?: 'day' | 'week' | 'month' | 'all';
+}
+
+export const getTransactions = async (filters?: TransactionFilters) => {
   try {
-    const response = await api.get('/cafe/transactions', { params });
+    const response = await api.get('/cafe/transactions', { params: filters });
     return response.data;
   } catch (error: any) {
     console.error('Transactions error:', error.response?.data?.message || error.message);
+    throw error;
+  }
+};
+
+export const getStudentTransactions = async (studentId: string, filters?: Omit<TransactionFilters, 'studentId'>) => {
+  try {
+    const response = await api.get(`/cafe/students/${studentId}/transactions`, { params: filters });
+    return response.data;
+  } catch (error: any) {
+    console.error('Student transactions error:', error.response?.data?.message || error.message);
     throw error;
   }
 };
