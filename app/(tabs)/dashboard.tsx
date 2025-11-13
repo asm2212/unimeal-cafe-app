@@ -14,7 +14,7 @@ import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Notifications from 'expo-notifications';
 import Colors from '../../constants/Colors';
-import { getCafeDashboard, CafeDashboard, getTransactions } from '../../services/api';
+import { getCafeDashboard, CafeDashboard, getTransactions, getStudents, Student } from '../../services/api';
 import notificationService from '../../services/notificationService';
 import transactionPollingService from '../../services/transactionPollingService';
 import {
@@ -34,6 +34,8 @@ export default function DashboardScreen() {
   const router = useRouter();
   const [cafeName, setCafeName] = useState('');
   const [stats, setStats] = useState<CafeDashboard | null>(null);
+  const [students, setStudents] = useState<Student[]>([]);
+  const [developerFee, setDeveloperFee] = useState(0);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [hasNewNotifications, setHasNewNotifications] = useState(false);
@@ -113,13 +115,55 @@ export default function DashboardScreen() {
     }
   };
 
+  const calculateDeveloperFee = (students: Student[]): number => {
+    const today = new Date();
+    let totalFee = 0;
+
+    students.forEach(student => {
+      if (student.createdAt) {
+        const registrationDate = new Date(student.createdAt);
+        const daysSinceRegistration = Math.floor((today.getTime() - registrationDate.getTime()) / (1000 * 60 * 60 * 24));
+        // 1 birr per day per student
+        const studentFee = Math.max(0, daysSinceRegistration);
+        totalFee += studentFee;
+        
+        // Debug logging
+        console.log(`Student ${student.fullName || student.name}: ${daysSinceRegistration} days = ${studentFee} birr`);
+      }
+    });
+
+    console.log(`Total developer fee: ${totalFee} birr for ${students.length} students`);
+    return totalFee;
+  };
+
   const loadDashboard = async () => {
     try {
       const name = await AsyncStorage.getItem('cafeName');
       setCafeName(name || 'My Cafe');
       
-      const data = await getCafeDashboard();
-      setStats(data);
+      const [dashboardData, studentsData] = await Promise.all([
+        getCafeDashboard(),
+        getStudents()
+      ]);
+      
+      setStats(dashboardData);
+      
+      // Handle different response formats for students
+      let studentsArray: Student[] = [];
+      if (Array.isArray(studentsData)) {
+        studentsArray = studentsData;
+      } else if (studentsData && Array.isArray(studentsData.students)) {
+        studentsArray = studentsData.students;
+      } else if (studentsData && studentsData.data && Array.isArray(studentsData.data)) {
+        studentsArray = studentsData.data;
+      }
+      
+      setStudents(studentsArray);
+      
+      // Calculate developer fee based on actual days since registration
+      const fee = calculateDeveloperFee(studentsArray);
+      setDeveloperFee(fee);
+      
     } catch (error) {
       console.error('Error loading dashboard:', error);
     } finally {
@@ -250,6 +294,16 @@ export default function DashboardScreen() {
               Birr {(stats?.statistics.revenue.weekly.amount || 0).toFixed(0)}
             </Text>
             <Text style={styles.statLabel}>Weekly Revenue</Text>
+          </View>
+
+          <View style={[styles.statCard, styles.statCardDeveloper]}>
+            <View style={styles.statIconContainer}>
+              <Ionicons name="code-slash" size={28} color={Colors.white} />
+            </View>
+            <Text style={styles.statValue}>
+              Birr {developerFee.toFixed(0)}
+            </Text>
+            <Text style={styles.statLabel}>Developer Fee (Total)</Text>
           </View>
         </View>
 
@@ -411,6 +465,9 @@ const styles = StyleSheet.create({
   },
   statCardInfo: {
     backgroundColor: '#3b82f6',
+  },
+  statCardDeveloper: {
+    backgroundColor: '#6366f1',
   },
   statIconContainer: {
     marginBottom: 8,

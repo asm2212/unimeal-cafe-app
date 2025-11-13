@@ -20,7 +20,7 @@
       },
       "autoIncrement": true,
       "env": {
-        "EXPO_PUBLIC_API_URL": "https://173.212.215.22:3003"
+        "EXPO_PUBLIC_API_URL": "https://unimeal-backend.duckdns.org"
       }
     }
   },

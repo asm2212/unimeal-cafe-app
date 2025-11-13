@@ -2,13 +2,25 @@
 # Exclude unnecessary files to reduce build size
 
 # Development files
-node_modules/
 .git/
 .github/
 .expo/
 .next/
 dist/
 build-output/
+
+# Android build artifacts (these take up most space)
+**/android/build/
+**/android/.cxx/
+**/.cxx/
+**/build/intermediates/
+**/build/outputs/
+android/app/.cxx/
+
+# Node modules build artifacts
+node_modules/**/android/build/
+node_modules/**/.cxx/
+node_modules/**/build/intermediates/
 
 # Documentation and scripts
 *.md
@@ -89,3 +101,36 @@ temp/
 # Backup files
 *.bak
 *.backup
+
+# Additional build optimizations
+# Test files
+**/__tests__/
+**/*.test.js
+**/*.test.ts
+**/*.test.tsx
+**/*.spec.js
+**/*.spec.ts
+**/*.spec.tsx
+
+# Source maps and debug files
+**/*.map
+**/*.debug.js
+
+# Large binary files in node_modules
+node_modules/**/bin/
+node_modules/**/sdks/
+node_modules/**/*.so
+node_modules/**/*.dll
+node_modules/**/*.dylib
+
+# Documentation in node_modules
+node_modules/**/README.md
+node_modules/**/CHANGELOG.md
+node_modules/**/LICENSE
+node_modules/**/docs/
+node_modules/**/examples/
+
+# Unnecessary platform files
+node_modules/**/ios/
+node_modules/**/windows/
+node_modules/**/macos/
