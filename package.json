@@ -1,6 +1,6 @@
 {
   "name": "unimeal-cafe-app",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "main": "expo-router/entry",
   "private": true,
   "scripts": {
