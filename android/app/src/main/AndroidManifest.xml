@@ -36,6 +36,7 @@
         <category android:name="android.intent.category.DEFAULT"/>
         <category android:name="android.intent.category.BROWSABLE"/>
         <data android:scheme="unimeal-cafe"/>
+        <data android:scheme="exp+unimeal-cafe-app"/>
       </intent-filter>
     </activity>
   </application>

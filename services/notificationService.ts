@@ -7,7 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 Notifications.setNotificationHandler({
   handleNotification: async (notification) => {
     const appState = AppState.currentState;
-    
+
     // Always show notifications, but adjust behavior based on app state
     return {
       shouldShowAlert: true, // Show alert even when app is active

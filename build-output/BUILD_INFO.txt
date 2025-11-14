@@ -1,8 +1,8 @@
 UniMeal Cafe Build Information
 ============================
 
-Version: 2.8.0
-Build Date: Thu Nov 13 12:16:32 AM EAT 2025
+Version: 3.0.0
+Build Date: Thu Nov 13 09:00:23 PM EAT 2025
 Build Type: Production Release
 Platform: Android
 Package: com.unimeal.cafe
@@ -22,4 +22,4 @@ Features:
 - Cross-device compatibility
 
 Repository: https://github.com/asm2212/unimeal-cafe-app
-Release Tag: v2.8.0
+Release Tag: v3.0.0
